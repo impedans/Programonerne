@@ -5,7 +5,8 @@
 //#ifndef _ANSI_H_
 //#define _ANSI_H_
 
-// Dette er en test for illustration af git
+// test
+
 
 #define ESC 0x1B
 
