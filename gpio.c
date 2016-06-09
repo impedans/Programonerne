@@ -13,7 +13,7 @@ char readkey(){
 }
 
 void ledClock(int n){
-	if(n==1){
+	if(n==0){
 		PEOUT &= ~(1<<6);
 		PEOUT &= ~(1<<5);
 		PGOUT &= ~(1<<7);
@@ -21,7 +21,7 @@ void ledClock(int n){
 		PEOUT &= ~(1<<7);
 		PEOUT |= (1<<7);
 		PEOUT &= ~(1<<7);
-	}else if(n==2){
+	}else if(n==1){
 		PEOUT &= ~(1<<6);
 		PEOUT &= ~(1<<5);
 		PEOUT &= ~(1<<7);
@@ -29,7 +29,7 @@ void ledClock(int n){
 		PGOUT &= ~(1<<7);
 		PGOUT |= (1<<7);
 		PGOUT &= ~(1<<7);
-	}else if(n==3){
+	}else if(n==2){
 		PEOUT &= ~(1<<6);
 		PGOUT &= ~(1<<7);
 		PEOUT &= ~(1<<7);
