@@ -5,12 +5,7 @@
 #include "include\src\ansi.h"
 
 // endnu en test
-// endnu en test
-// endnu en test
-// endnu en test
-// endnu en test
-// endnu en test
-// endnu en test
+
 
 
 void main(){
