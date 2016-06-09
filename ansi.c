@@ -5,8 +5,6 @@
 //#ifndef _ANSI_H_
 //#define _ANSI_H_
 
-// test
-
 
 #define ESC 0x1B
 
