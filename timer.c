@@ -3,7 +3,7 @@
 #include "ansi.h"
 #include "gpio.h"
 #include "timer.h"
-
+/*
 void ting(struct time *total){
 	if((readkey() & 0x08)==0){       //split time 2
 		while(1){
@@ -44,7 +44,7 @@ void ting(struct time *total){
 					}
 				}
 			}
-		}
+			}
 	}
 
 	if((readkey() & 0x80)==0){       //start/stop
@@ -63,16 +63,4 @@ void ting(struct time *total){
 			}
 		}
 	}
-	/*if((readkey() & 0x08)==0 && (readkey() & 0x40)==0){       //reset
-		while(1){
-			if((readkey() & 0x08)!=0 && (readkey() & 0x40)!=0){
-	      		DI();
-        		(*total).hour=0;
-        		(*total).minute=0;
-        		(*total).second=0;
-        		(*total).csecond=0;
-				break;
-			}
-		}
-	}*/
-}
+}*/
