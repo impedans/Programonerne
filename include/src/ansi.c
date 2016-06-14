@@ -1,6 +1,7 @@
 #include <eZ8.h>             // special encore constants, macros and flash routines
 #include <sio.h>             // special encore serial i/o routines
 #include <string.h>
+#include "game.h"
 
 //#ifndef _ANSI_H_
 //#define _ANSI_H_
@@ -241,4 +242,9 @@ void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){
 	}
 //	printf("%c", 217);
 	
+}
+
+void drawInfo(struct positions *game){
+	gotoxy(55,17);
+	printf("%d", (*game).lives);
 }

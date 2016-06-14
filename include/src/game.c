@@ -22,7 +22,6 @@ void gameInitial(struct positions *game){
 
   // draw striker
   (*game).strikerCenter = length/2;
-
   drawStriker((*game).strikerCenter, (*game).height);
 
   // draw ball
@@ -31,6 +30,12 @@ void gameInitial(struct positions *game){
   (*game).ballAngle = 128;
 
   drawBall((*game).ballX,(*game).ballY);
+  
+  //set amount of lives, write info text
+  (*game).lives = 3;
+  gotoxy(55,10);
+  printf("Lives: ");
+  drawInfo(game);
 
   // draw Blocks
   ////////////////LEVEL 1/////////////////////////////////////
@@ -53,6 +58,7 @@ void gameInitial(struct positions *game){
 }
 
 void nextPosition(struct positions *game, int BallTime){
+  int i;
   /*------------------------------Ball position------------------------------------------*/
   if(BallTime == 1){
      deleteCharacter((*game).ballX,(*game).ballY);
@@ -92,7 +98,15 @@ void nextPosition(struct positions *game, int BallTime){
 		}
 
     }else if((*game).ballX > (*game).height){																//Out of bounds
-       releaseBall(game);
+       (*game).lives--;
+	   drawInfo(game);
+	   if ((*game).lives == 0){
+	    for(i = -7; i <= 7; i++){
+      		deleteCharacter((*game).height, (*game).strikerCenter-i);
+  		}
+		gameInitial(game);
+	   }
+	   releaseBall(game);
     } /*else if((*game).block[(*game).ballX][(*game).ballY]==1){
        (*game).speedX *= -1;
        (*game).ballX = (*game).ballX + (*game).speedX;
