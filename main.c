@@ -7,7 +7,6 @@
 #include "include\src\charset.h"
 #include "include\src\game.h"
 //#include "include\src\timer.h"
-//#include "include\src\timer.h"
 
 
 #define FIX14_SHIFT 14
@@ -98,9 +97,16 @@ void LEDupdate(int i){
 void main(){
 	struct positions game1;
 	int ballTimer;
+	//short block[150][50];
+	//short *b[150][50];
 	game1.length = 50;
 	game1.height = 50;
+	//b = block;
+
+
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
+	
+	
 	LEDinit();    //flydt timeren i sin egen funktion!!
 	cleanscreen();
 	gameInitial(&game1);

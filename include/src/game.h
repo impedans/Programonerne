@@ -12,6 +12,7 @@ struct positions{
   int speedY;
   int ballAngle;
   int strikerCenter;
+  short block[150][50];
 };
 
 

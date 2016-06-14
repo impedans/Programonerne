@@ -209,9 +209,15 @@ void deleteCharacter(int x,int y){
 
 //#endif /*! _ANSI_H_ */
 
-void drawBlock(int x1, int y1, int x2, int y2){ 
+void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){ 
 	int i, j;
 	gotoxy(x1,y1);
+
+	/*for(i = x1; i<=x2; i++){
+ 		for(j = y1; j<=y2; j++){
+			block[i][j] = 1;
+		}
+	}*/
 
 //	printf("%c", 218);
 	for(i = 0 ; i < x2-x1+1 ; i++){
@@ -234,4 +240,5 @@ void drawBlock(int x1, int y1, int x2, int y2){
 		printf("%c",219);
 	}
 //	printf("%c", 217);
+	
 }

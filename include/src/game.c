@@ -8,8 +8,9 @@
 void gameInitial(struct positions *game){
   int length = (*game).length * 3;
   int height = (*game).height;
-  //blocks array that holds ccordinates and lifes
-  //int *pheight;
+  //blocks array that holds ccordinates and lives
+  
+
 
   if ((length > XMAX * 3 || length < 0) || ( height > YMAX || height < 0)){
     printf("ERROR\n");
@@ -34,8 +35,9 @@ void gameInitial(struct positions *game){
   // draw Blocks
   ////////////////LEVEL 1/////////////////////////////////////
 
-  drawBlock(10,10,20,20);       //block varable initialatation
-  drawBlock(10,20,30,30);
+  //drawBlock(10,10,20,20, (*game).block);       //block varable initialatation
+  
+  /*drawBlock(10,20,30,30);
   drawBlock(10,30,40,40);
   drawBlock(10,40,50,50);
   drawBlock(10,50,60,60);
@@ -46,7 +48,7 @@ void gameInitial(struct positions *game){
   drawBlock(10,100,110,110);
   drawBlock(10,110,120,120);
   drawBlock(10,120,130,130);
-  drawBlock(10,130,140,140);
+  drawBlock(10,130,140,140);*/
 
 }
 
@@ -90,11 +92,11 @@ void nextPosition(struct positions *game, int BallTime){
 		}
 
     }else if((*game).ballX > (*game).height){																//Out of bounds
-       (*game).ballX = (*game).height - 1;
-       (*game).ballY = ((*game).length*3)/2;
-       (*game).speedX = 0;
-       (*game).speedY = 0;
-    }
+       releaseBall(game);
+    } /*else if((*game).block[(*game).ballX][(*game).ballY]==1){
+       (*game).speedX *= -1;
+       (*game).ballX = (*game).ballX + (*game).speedX;
+	}*/
 	drawBall((*game).ballX,(*game).ballY);
    //(*game).ballX = (*game).ballX + (*game).speedX;
    //(*game).ballY = (*game).ballY + (*game).speedY; 
@@ -114,12 +116,22 @@ void nextPosition(struct positions *game, int BallTime){
 }
 
 void releaseBall(struct positions *game){
-  //while (1){
-    //if (PLAYER_INPUT_RELEASE_BUTTON == 1){
-
-      (*game).speedX = -1;
-      (*game).speedY = 1;
-     // break;
-    //}
-  //}
+  int i;
+  (*game).ballX = (*game).height - 1;
+  (*game).ballY = ((*game).length*3)/2;
+  (*game).speedX = 0;
+  (*game).speedY = 0;
+  drawBall((*game).ballX,(*game).ballY);
+  for(i = -8; i <= 8; i++){
+      deleteCharacter((*game).height, (*game).strikerCenter-i);
+  }
+  (*game).strikerCenter = (*game).length*3/2;
+  drawStriker((*game).strikerCenter, (*game).height);
+  while(1){
+     if((readkey() & 0x40)==0){
+       (*game).speedX = -1;
+       (*game).speedY = 1;
+	   break;
+     }
+  }
 }

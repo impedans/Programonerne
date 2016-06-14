@@ -1,6 +1,7 @@
 #include <eZ8.h>             // special encore constants, macros and flash routines
 #include <sio.h>             // special encore serial i/o routines
 #include <string.h>
+#include "game.h"
 
 #define FIX14_SHIFT 14
 
@@ -22,4 +23,4 @@ void gameWindow(int x1, int y1, int x2, int y2);
 void drawStriker(int strikerCenter, int height);
 void drawBall(int x,int y);
 void deleteCharacter(int x,int y);
-void drawBlock(int x1, int y1, int x2, int y2);
+void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]);
