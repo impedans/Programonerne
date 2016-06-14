@@ -35,6 +35,12 @@ void gameInitial(struct positions *game){
   (*game).lives = 3;
   gotoxy(55,10);
   printf("Lives: ");
+  (*game).points = 0;
+  gotoxy(56,10);
+  printf("Points: ");
+  (*game).level = 1;
+  gotoxy(57,10);
+  printf("Level: ");
   drawInfo(game);
 
   // draw Blocks

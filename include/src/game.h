@@ -6,6 +6,8 @@
 struct positions{
   int length;
   int lives;
+  int points;
+  int level;
   int height;
   int ballX;
   int ballY;

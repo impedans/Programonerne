@@ -245,6 +245,10 @@ void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){
 }
 
 void drawInfo(struct positions *game){
-	gotoxy(55,17);
+	gotoxy(55,18);
 	printf("%d", (*game).lives);
+	gotoxy(56,18);
+	printf("%d", (*game).points);
+	gotoxy(57,18);
+	printf("%d", (*game).level);
 }
