@@ -3,6 +3,7 @@
 #include "game.h"
 #include "ansi.h"
 #include "gpio.h"
+#include "lut.h"
 
 
 void gameInitial(struct positions *game){
@@ -13,7 +14,7 @@ void gameInitial(struct positions *game){
 
 
 
-  if ((length > XMAX * 3 || length < 0) || ( height > YMAX || height < 0)){
+  if ((length > YMAX * 3 || length < 0) || ( height > XMAX || height < 0)){
     printf("ERROR\n");
     return;
   }
@@ -26,11 +27,10 @@ void gameInitial(struct positions *game){
   drawStriker((*game).strikerCenter, (*game).height);
 
   // draw ball
-  (*game).ballX = height - 1;
-  (*game).ballY = (*game).strikerCenter;
-  (*game).ballAngle = 128;
+  (*game).ballY = height - 1;
+  (*game).ballX = (*game).strikerCenter;
 
-  drawBall((*game).ballX,(*game).ballY);
+  drawBall((*game).ballY,(*game).ballX);
 
   //set amount of lives, write info text
   (*game).lives = 3;
@@ -78,45 +78,50 @@ void nextPosition(struct positions *game, int BallTime){
   int i;
   /*------------------------------Ball position------------------------------------------*/
   if(BallTime == 1){
-     deleteCharacter((*game).ballX,(*game).ballY);
-  	(*game).ballX = (*game).ballX + (*game).speedX;
-    (*game).ballY = (*game).ballY + (*game).speedY;
+    (*game).oldBallY = (*game).ballY;
+   (*game).oldBallX = (*game).ballX;
 
-    if((*game).ballX <= 1){													//Hit top
-       (*game).speedX *= -1;
-	   //printf("%c",205);
-       (*game).ballX = (*game).ballX + (*game).speedX;
+    if((*game).ballY <= 1){													//Hit top
+      (*game).speedX *= -1;
+      (*game).ballAngle = 512-(*game).ballAngle;
 
-    } else if ((*game).ballY <= 1 || (*game).ballY >= (*game).length*3){		//Hit sides
-       //(*game).ballY *= -1;
-       (*game).speedY *= -1;
-	   (*game).ballY = (*game).ballY + (*game).speedY;
-	   //printf("%c", 186);
+      (*game).ballY = (*game).ballY + (*game).speedY;
+      (*game).ballX = (*game).ballX + (cos((*game).ballAngle)/sin((*game).ballAngle));      // sin(angle)/cos(angle)
+	  i= (cos((*game).ballAngle)/sin((*game).ballAngle));
+	  printf("fix osv lig: %d og bally: %d",i, (*game).ballX);
 
-    } else if ((*game).ballX == (*game).height && ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter+8)){
-		if((*game).ballY > (*game).strikerCenter-1 && (*game).ballY < (*game).strikerCenter+1){
-          (*game).speedX *= -1;
+    } else if ((*game).ballX <= 1 || (*game).ballX >= (*game).length*3){		//Hit sides
+      (*game).ballAngle = 256-(*game).ballAngle;
 
-		} else if ((*game).ballY > (*game).strikerCenter-4 && (*game).ballY < (*game).strikerCenter-1){
-          (*game).speedX *= -1;
-		  (*game).speedY--;
+      (*game).ballY = (*game).ballY + (*game).speedY;
+      (*game).ballX = (*game).ballX + (cos((*game).ballAngle)/sin((*game).ballAngle));
 
-		} else if ((*game).ballY > (*game).strikerCenter+1 && (*game).ballY < (*game).strikerCenter+4){
-          (*game).speedX *= -1;
-		  (*game).speedY++;
+    } else if ((*game).ballY == (*game).height && ((*game).ballX > (*game).strikerCenter-8 && (*game).ballX < (*game).strikerCenter+8)){
+		  if((*game).ballX > (*game).strikerCenter-1 && (*game).ballX < (*game).strikerCenter+1){
+        (*game).speedX *= -1;
+        (*game).ballAngle = 512-(*game).ballAngle;
 
-		} else if ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter-4){
-          (*game).speedX *= -1;
-		  (*game).speedY -= 2;
+	  	} else if ((*game).ballX > (*game).strikerCenter-4 && (*game).ballX < (*game).strikerCenter-1){
+        (*game).speedX *= -1;
+        (*game).ballAngle = (512-(*game).ballAngle) + 12;
 
-		} else {
-		  (*game).speedX *= -1;
-		  (*game).speedY += 2;
+	  	} else if ((*game).ballX > (*game).strikerCenter+1 && (*game).ballX < (*game).strikerCenter+4){
+        (*game).speedX *= -1;
+        (*game).ballAngle = (512-(*game).ballAngle) - 12;
+
+	  	} else if ((*game).ballX > (*game).strikerCenter-8 && (*game).ballX < (*game).strikerCenter-4){
+        (*game).speedX *= -1;
+        (*game).ballAngle = (512-(*game).ballAngle) - 24;
+
+	  	} else {
+        (*game).speedX *= -1;
+		    (*game).ballAngle = (512-(*game).ballAngle) - 24;
 		}
-
-    }else if((*game).ballX > (*game).height){																//Out of bounds
-    (*game).lives--;
-    drawFlag((*game).lives);
+    (*game).ballY = (*game).ballY + (*game).speedY;
+	  (*game).ballX = (*game).ballX + (cos((*game).ballAngle)/sin((*game).ballAngle));
+    } else if((*game).ballY > (*game).height){																//Out of bounds
+     (*game).lives--;
+     drawFlag((*game).lives);
 	   drawInfo(game);
 	   if ((*game).lives == 0){
 	    for(i = -7; i <= 7; i++){
@@ -125,47 +130,48 @@ void nextPosition(struct positions *game, int BallTime){
       gotoxy(55, 50);
       printf("Mexico triumpfed. Press right button to restart");
       while(1){
-        //while(1){
            if((readkey() & 0x80)==0){
               for(i=0; i <= 46; i++){
                 deleteCharacter(55, 50+i);
               }
 	            break;
            }
-        //}
       }
 		  gameInitial(game);
 	   }
 	   releaseBall(game);
-    } /*else if((*game).block[(*game).ballX][(*game).ballY]==1){
-       (*game).speedX *= -1;
-       (*game).ballX = (*game).ballX + (*game).speedX;
-	}*/
-	drawBall((*game).ballX,(*game).ballY);
-   //(*game).ballX = (*game).ballX + (*game).speedX;
-   //(*game).ballY = (*game).ballY + (*game).speedY;
+   }else {
+     (*game).ballY = (*game).ballY + (*game).speedY;
+     (*game).ballX = (*game).ballX + (cos((*game).ballAngle)/sin((*game).ballAngle));
+	 i = (FIX14_DIV((cos((*game).ballAngle)),(sin((*game).ballAngle))) >> 16);
+	 printf("%d og s� %d",(*game).ballX, i);
+   }
+
+    deleteCharacter((*game).oldBallY,(*game).oldBallX);
+	drawBall((*game).ballY,(*game).ballX);
+
   }
   /*------------------------------Striker position------------------------------------------*/
   if((readkey() & 0x08) == 0 && (*game).strikerCenter > 9){
      (*game).strikerCenter--;
-	 deleteCharacter((*game).height, (*game).strikerCenter+8);
+	   deleteCharacter((*game).height, (*game).strikerCenter+8);
   } else if((readkey() & 0x80) == 0 && (*game).strikerCenter < (*game).length*3-7){
      (*game).strikerCenter++;
      deleteCharacter((*game).height, (*game).strikerCenter-8);
   }
 
   drawStriker((*game).strikerCenter, (*game).height);
-  //drawBall((*game).ballX,(*game).ballY);
-  //deleteCharacter((*game).ballX,(*game).ballY);
 }
 
 void releaseBall(struct positions *game){
-  int i;
-  (*game).ballX = (*game).height - 1;
-  (*game).ballY = ((*game).length*3)/2;
-  (*game).speedX = 0;
+  int i,test;
+  (*game).ballAngle = 64;
+  test = (cos((*game).ballAngle)/sin((*game).ballAngle));
+  printf("%d",test);
+  (*game).ballY = (*game).height - 1;
+  (*game).ballX = ((*game).length*3)/2;
   (*game).speedY = 0;
-  drawBall((*game).ballX,(*game).ballY);
+  drawBall((*game).ballY,(*game).ballX);
   for(i = -7; i <= 7; i++){
       deleteCharacter((*game).height, (*game).strikerCenter-i);
   }
@@ -173,8 +179,7 @@ void releaseBall(struct positions *game){
   drawStriker((*game).strikerCenter, (*game).height);
   while(1){
      if((readkey() & 0x40)==0){
-       (*game).speedX = -1;
-       (*game).speedY = 1;
+       (*game).speedY = -1;
 	   break;
      }
   }

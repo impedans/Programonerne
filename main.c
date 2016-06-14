@@ -9,8 +9,8 @@
 //#include "include\src\timer.h"
 
 
-#define FIX14_SHIFT 14
-#define FIX14_MULT(a, b)	( (a)*(b) >> FIX14_SHIFT )
+//#define FIX14_SHIFT 14
+//#define FIX14_MULT(a, b)	( (a)*(b) >> FIX14_SHIFT )
 //#define FIX14_DIV(a, b)	( ((a) << FIX14_SHIFT) / (b) )
 #define DIGIT_1 {PEOUT &= ~(1<<6);PEOUT &= ~(1<<5);PGOUT &= ~(1<<7);PEOUT &= ~(1<<7);PEOUT |= (1<<7);PEOUT &= ~(1<<7);}
 #define DIGIT_2 {PEOUT &= ~(1<<6);PEOUT &= ~(1<<6);PEOUT &= ~(1<<7);PGOUT &= ~(1<<7);PGOUT |= (1<<7);PGOUT &= ~(1<<7);}

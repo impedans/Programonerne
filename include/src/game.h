@@ -11,6 +11,8 @@ struct positions{
   int height;
   int ballX;
   int ballY;
+  int oldBallX;
+  int oldBallY;
   int speedX;
   int speedY;
   int ballAngle;
