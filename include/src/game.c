@@ -122,7 +122,7 @@ void releaseBall(struct positions *game){
   (*game).speedX = 0;
   (*game).speedY = 0;
   drawBall((*game).ballX,(*game).ballY);
-  for(i = -8; i <= 8; i++){
+  for(i = -7; i <= 7; i++){
       deleteCharacter((*game).height, (*game).strikerCenter-i);
   }
   (*game).strikerCenter = (*game).length*3/2;
