@@ -173,4 +173,65 @@ void window(int x1, int y1, int x2, int y2, int style, char* title){ //, char[] 
 	}
 }
 
+void gameWindow(int x1, int y1, int x2, int y2){ //, char[] title)
+	int i, j;
+	gotoxy(x1,y1);
+    printf("%c", 201);
+	for(i = 0 ; i < x2-x1 ; i++){
+      printf("%c",205);
+    }
+      printf("%c\n", 187);
+
+    for (i = 1; i <= (y2-y1); i++){
+	  gotoxy(x1+i,y1);
+	  printf("%c", 186);
+	
+      gotoxy(x1+i,(y2) * 3 + 1);
+      printf("%c\n", 186);
+    }
+}
+
+void drawStriker(int strikerCenter, int height){
+  gotoxy(height, strikerCenter - 7);
+  printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",60,61,61,61,61,61,61,61,61,61,61,61,61,61,62);
+
+}
+
+void drawBall(int x,int y){
+  gotoxy(x,y);
+  printf("%c",48);
+}
+
+void deleteCharacter(int x,int y){
+  gotoxy(x,y);
+  printf("%c",32);
+}
+
 //#endif /*! _ANSI_H_ */
+
+void drawBlock(int x1, int y1, int x2, int y2){ 
+	int i, j;
+	gotoxy(x1,y1);
+
+//	printf("%c", 218);
+	for(i = 0 ; i < x2-x1+1 ; i++){
+		printf("%c",219);
+	}
+//	printf("%c\n", 191);
+
+	for (i = 1; i <= (y2-y1)+1; i++){
+		gotoxy(x1+i,y1);
+	//	printf("%c", 179);
+		for(j = 0; j < x2-x1+1; j++){
+			printf("%c", 219);
+		}
+	//	printf("%c\n", 179);
+	}
+
+	gotoxy(y2,x1);
+	//printf("%c", 192);
+	for(i=0 ; i < x2-x1+1; i++){
+		printf("%c",219);
+	}
+//	printf("%c", 217);
+}

@@ -5,6 +5,7 @@
 #include "include\src\ansi.h"
 #include "include\src\gpio.h"
 #include "include\src\charset.h"
+#include "include\src\game.h"
 //#include "include\src\timer.h"
 
 
@@ -19,10 +20,12 @@
 char videoBuffer[5][6];
 int nFlagClock=0;
 int nTickTime=0;
+int nBallTime=0;
 
 #pragma interrupt
 void timer0int(){
 	nTickTime++;
+	nBallTime++;
 	if(nFlagClock==1){
 		nFlagClock=0;
 	}else{
@@ -64,7 +67,7 @@ void LEDsetString(char string[]){
 
 void LEDupdate(int i){
 	int j;
-	if(nFlagClock==1){			
+	if(nFlagClock==1){
 		for(j=0; j < 4; j++){    //update
 
 			PEOUT |= 0x1F;
@@ -87,37 +90,30 @@ void LEDupdate(int i){
 
 			}
 		}
-	} 
+	}
 }
 
 
 void main(){
-	char input[5]={'V','E','E','N','!'};
-	int i,j,scrollA;
+	struct positions game1;
+	int ballTimer;
+	game1.length = 50;
+	game1.height = 50;
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
-	LEDinit();
-	LEDsetString(input);
+	LEDinit();    //flydt timeren i sin egen funktion!!
+	cleanscreen();
+	gameInitial(&game1);
+	releaseBall(&game1);
+
 	while(1){
-		LEDupdate(0);
-		LEDupdate(1);
-		LEDupdate(2);
-		LEDupdate(3);
-		LEDupdate(4);
-		if(nTickTime==500){
-			scrollA = videoBuffer[4][5];
-			for(i = 4; i >= 0; i--){
-				for(j = 5; j >= 1; j--){
-					videoBuffer[i][j] = videoBuffer[i][j-1];
-				}
-				if(i==0){
-					videoBuffer[0][0] = scrollA;
-				}else{
-					videoBuffer[i][0] = videoBuffer[i-1][5];
-				}
-			}
-			nTickTime=0;
-		}
-		
+	  if(nTickTime>=10){
+		nextPosition(&game1, 0);
+        nTickTime = 0;
+	  }
+	  if(nBallTime>=50){
+	    nextPosition(&game1, 1);
+		nBallTime = 0;
+      }
 	}
 
 	do{} while(1>0);
