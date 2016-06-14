@@ -186,7 +186,7 @@ void gameWindow(int x1, int y1, int x2, int y2){ //, char[] title)
     for (i = 1; i <= (y2-y1); i++){
 	  gotoxy(x1+i,y1);
 	  printf("%c", 186);
-	
+
       gotoxy(x1+i,(y2) * 3 + 1);
       printf("%c\n", 186);
     }
@@ -194,13 +194,24 @@ void gameWindow(int x1, int y1, int x2, int y2){ //, char[] title)
 
 void drawStriker(int strikerCenter, int height){
   gotoxy(height, strikerCenter - 7);
-  printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",60,61,61,61,61,61,61,61,61,61,61,61,61,61,62);
+  //printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",60,61,61,61,61,61,61,61,61,61,61,61,61,61,62);
+  color(0,1);
+  printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",178,178,178,178,178,178,178,178,178,178,178,178,178,178,178);
+  resetbgcolor();
 
 }
 
 void drawBall(int x,int y){
+  //int i;
   gotoxy(x,y);
-  printf("%c",48);
+  if(x%2==0){
+    printf("%c",124);
+	//i=0;
+  } else{
+    printf("%c",88);
+	//i=1;
+  }
+  //printf("%c",48);
 }
 
 void deleteCharacter(int x,int y){
@@ -210,7 +221,7 @@ void deleteCharacter(int x,int y){
 
 //#endif /*! _ANSI_H_ */
 
-void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){ 
+void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){
 	int i, j;
 	gotoxy(x1,y1);
 
@@ -241,7 +252,7 @@ void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){
 		printf("%c",219);
 	}
 //	printf("%c", 217);
-	
+
 }
 
 void drawInfo(struct positions *game){
@@ -251,4 +262,33 @@ void drawInfo(struct positions *game){
 	printf("%d", (*game).points);
 	gotoxy(57,18);
 	printf("%d", (*game).level);
+}
+
+void drawFlag(int lives){
+  int i, j;
+  if (lives == 2){
+    gotoxy(55,99);
+    for (i = 0; i < 7; i++){
+	  color(2,0);
+      printf("%c%c%c%c%c%c%c", 219, 219, 219, 219, 219, 219, 219);
+      gotoxy(55+i,99);
+	  color(15,0);
+    }
+  } else if (lives == 1){
+    gotoxy(55,106);
+    for (i = 0; i < 7; i++){
+	  color(15,0);
+      printf("%c%c%c%c%c%c%c", 219, 219, 219, 219, 219, 219, 219);
+      gotoxy(55+i,106);
+	  color(15,0);
+    }
+  } else if (lives == 0) {
+    gotoxy(55,113);
+    for (i = 0; i < 7; i++){
+	  color(1,0);
+      printf("%c%c%c%c%c%c%c", 219, 219, 219, 219, 219, 219, 219);
+      gotoxy(55+i,113);
+	  color(15,0);
+    }
+  }
 }

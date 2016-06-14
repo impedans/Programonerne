@@ -6,10 +6,11 @@
 
 
 void gameInitial(struct positions *game){
+  int i, j;
   int length = (*game).length * 3;
   int height = (*game).height;
   //blocks array that holds ccordinates and lives
-  
+
 
 
   if ((length > XMAX * 3 || length < 0) || ( height > YMAX || height < 0)){
@@ -30,7 +31,7 @@ void gameInitial(struct positions *game){
   (*game).ballAngle = 128;
 
   drawBall((*game).ballX,(*game).ballY);
-  
+
   //set amount of lives, write info text
   (*game).lives = 3;
   gotoxy(55,10);
@@ -43,11 +44,21 @@ void gameInitial(struct positions *game){
   printf("Level: ");
   drawInfo(game);
 
+  // Remove Mexican flag
+  for (i = 0; i < 7; i++){
+    for (j = 0; j < 7; j++){
+      deleteCharacter(55+i,99+j);
+      deleteCharacter(55+i,106+j);
+      deleteCharacter(55+i,113+j);
+    }
+  }
+  color(15,0);
+
   // draw Blocks
   ////////////////LEVEL 1/////////////////////////////////////
 
   //drawBlock(10,10,20,20, (*game).block);       //block varable initialatation
-  
+
   /*drawBlock(10,20,30,30);
   drawBlock(10,30,40,40);
   drawBlock(10,40,50,50);
@@ -70,7 +81,7 @@ void nextPosition(struct positions *game, int BallTime){
      deleteCharacter((*game).ballX,(*game).ballY);
   	(*game).ballX = (*game).ballX + (*game).speedX;
     (*game).ballY = (*game).ballY + (*game).speedY;
-	
+
     if((*game).ballX <= 1){													//Hit top
        (*game).speedX *= -1;
 	   //printf("%c",205);
@@ -104,13 +115,26 @@ void nextPosition(struct positions *game, int BallTime){
 		}
 
     }else if((*game).ballX > (*game).height){																//Out of bounds
-       (*game).lives--;
+    (*game).lives--;
+    drawFlag((*game).lives);
 	   drawInfo(game);
 	   if ((*game).lives == 0){
 	    for(i = -7; i <= 7; i++){
       		deleteCharacter((*game).height, (*game).strikerCenter-i);
   		}
-		gameInitial(game);
+      while(1){
+        gotoxy(55, 50);
+        printf("Mexico triumpfed. Press right button to restart");
+        //while(1){
+           if((readkey() & 0x80)==0){
+              for(i=0; i <= 46; i++){
+                deleteCharacter(55, 50+i);
+              }
+	            break;
+           }
+        //}
+      }
+		  gameInitial(game);
 	   }
 	   releaseBall(game);
     } /*else if((*game).block[(*game).ballX][(*game).ballY]==1){
@@ -119,7 +143,7 @@ void nextPosition(struct positions *game, int BallTime){
 	}*/
 	drawBall((*game).ballX,(*game).ballY);
    //(*game).ballX = (*game).ballX + (*game).speedX;
-   //(*game).ballY = (*game).ballY + (*game).speedY; 
+   //(*game).ballY = (*game).ballY + (*game).speedY;
   }
   /*------------------------------Striker position------------------------------------------*/
   if((readkey() & 0x08) == 0 && (*game).strikerCenter > 9){

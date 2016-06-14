@@ -25,3 +25,4 @@ void drawBall(int x,int y);
 void deleteCharacter(int x,int y);
 void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]);
 void drawInfo(struct positions *game);
+void drawFlag(int lives);
