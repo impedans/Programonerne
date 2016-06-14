@@ -122,9 +122,9 @@ void nextPosition(struct positions *game, int BallTime){
 	    for(i = -7; i <= 7; i++){
       		deleteCharacter((*game).height, (*game).strikerCenter-i);
   		}
+      gotoxy(55, 50);
+      printf("Mexico triumpfed. Press right button to restart");
       while(1){
-        gotoxy(55, 50);
-        printf("Mexico triumpfed. Press right button to restart");
         //while(1){
            if((readkey() & 0x80)==0){
               for(i=0; i <= 46; i++){
