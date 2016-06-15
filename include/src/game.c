@@ -82,31 +82,31 @@ void nextPosition(struct positions *game, int BallTime){
   	(*game).ballX = (*game).ballX + (*game).speedX;
     (*game).ballY = (*game).ballY + (*game).speedY;
 
-    if((*game).ballX <= 1){													//Hit top
+    if((*game).ballX <= 1){													                  //Hit top
        (*game).speedX *= -1;
-	   //printf("%c",205);
-       (*game).ballX = (*game).ballX + (*game).speedX;
-
-    } else if ((*game).ballY <= 1 || (*game).ballY >= (*game).length*3){		//Hit sides
-       //(*game).ballY *= -1;
+       (*game).ballX = 2;                                             //EDIT: returns ball to fiels
+    } if ((*game).ballY <= 1 || (*game).ballY >= (*game).length*3){		//Hit sides (EDIT: runs every time)
        (*game).speedY *= -1;
-	   (*game).ballY = (*game).ballY + (*game).speedY;
-	   //printf("%c", 186);
+       if((*game).ballY <= 1){                                        //EDIT: if/else that returns ball to field
+         (*game).ballY = 2;
+       } else {
+         (*game).ballY = (*game).length*3-1;
+       }
 
-    } else if ((*game).ballX == (*game).height && ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter+8)){
+    } else if ((*game).ballX == (*game).height-1 && ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter+8)){
 		if((*game).ballY > (*game).strikerCenter-1 && (*game).ballY < (*game).strikerCenter+1){
           (*game).speedX *= -1;
 
 		} else if ((*game).ballY > (*game).strikerCenter-4 && (*game).ballY < (*game).strikerCenter-1){
-          (*game).speedX *= -1;
+      (*game).speedX *= -1;
 		  (*game).speedY--;
 
 		} else if ((*game).ballY > (*game).strikerCenter+1 && (*game).ballY < (*game).strikerCenter+4){
-          (*game).speedX *= -1;
+      (*game).speedX *= -1;
 		  (*game).speedY++;
 
 		} else if ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter-4){
-          (*game).speedX *= -1;
+      (*game).speedX *= -1;
 		  (*game).speedY -= 2;
 
 		} else {
@@ -115,63 +115,59 @@ void nextPosition(struct positions *game, int BallTime){
 		}
 
     }else if((*game).ballX > (*game).height){																//Out of bounds
-    (*game).lives--;
-    drawFlag((*game).lives);
-	   drawInfo(game);
-	   if ((*game).lives == 0){
-	    for(i = -7; i <= 7; i++){
-      		deleteCharacter((*game).height, (*game).strikerCenter-i);
-  		}
-      gotoxy(55, 50);
-      printf("Mexico triumpfed. Press right button to restart");
-      while(1){
-        //while(1){
-           if((readkey() & 0x80)==0){
-              for(i=0; i <= 46; i++){
-                deleteCharacter(55, 50+i);
-              }
-	            break;
-           }
-        //}
-      }
-		  gameInitial(game);
-	   }
-	   releaseBall(game);
-    } /*else if((*game).block[(*game).ballX][(*game).ballY]==1){
-       (*game).speedX *= -1;
-       (*game).ballX = (*game).ballX + (*game).speedX;
-	}*/
-	drawBall((*game).ballX,(*game).ballY);
-   //(*game).ballX = (*game).ballX + (*game).speedX;
-   //(*game).ballY = (*game).ballY + (*game).speedY;
-  }
+      (*game).lives--;
+      drawFlag((*game).lives);
+      drawInfo(game);
+
+	    if ((*game).lives == 0){
+	      for(i = -7; i <= 7; i++){
+          deleteCharacter((*game).height, (*game).strikerCenter-i);
+        }
+        gotoxy(55, 50);
+        printf("Mexico triumpfed. Press right button to restart");
+        while(1){
+          if((readkey() & 0x80)==0){
+            for(i=0; i <= 46; i++){
+              deleteCharacter(55, 50+i);
+            }
+	        break;
+          }
+        }
+		    gameInitial(game);
+	     }
+       releaseBall(game);
+     }
+     drawBall((*game).ballX,(*game).ballY);
+   }
+
   /*------------------------------Striker position------------------------------------------*/
   if((readkey() & 0x08) == 0 && (*game).strikerCenter > 9){
-     (*game).strikerCenter--;
-	 deleteCharacter((*game).height, (*game).strikerCenter+8);
+    (*game).strikerCenter--;
+	  deleteCharacter((*game).height, (*game).strikerCenter+8);
+    drawStriker((*game).strikerCenter, (*game).height);
   } else if((readkey() & 0x80) == 0 && (*game).strikerCenter < (*game).length*3-7){
-     (*game).strikerCenter++;
-     deleteCharacter((*game).height, (*game).strikerCenter-8);
+    (*game).strikerCenter++;
+    deleteCharacter((*game).height, (*game).strikerCenter-8);
+    drawStriker((*game).strikerCenter, (*game).height);
   }
-
-  drawStriker((*game).strikerCenter, (*game).height);
-  //drawBall((*game).ballX,(*game).ballY);
-  //deleteCharacter((*game).ballX,(*game).ballY);
 }
 
 void releaseBall(struct positions *game){
   int i;
-  (*game).ballX = (*game).height - 1;
+
+  (*game).ballX = (*game).height - 1;                             //Resets ball
   (*game).ballY = ((*game).length*3)/2;
   (*game).speedX = 0;
   (*game).speedY = 0;
   drawBall((*game).ballX,(*game).ballY);
+
   for(i = -7; i <= 7; i++){
-      deleteCharacter((*game).height, (*game).strikerCenter-i);
+      deleteCharacter((*game).height, (*game).strikerCenter-i);   //Deletes old striker
   }
-  (*game).strikerCenter = (*game).length*3/2;
+  (*game).strikerCenter = (*game).length*3/2;                     //Draws new striker
   drawStriker((*game).strikerCenter, (*game).height);
-  while(1){
+
+  while(1){                                                       //Restarts game
      if((readkey() & 0x40)==0){
        (*game).speedX = -1;
        (*game).speedY = 1;
