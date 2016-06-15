@@ -23,7 +23,7 @@ void printFix(long i);
 long expand(long i);
 signed short sin(int a);
 signed short cos(int a);
-void initVector(struct TVector *v, int angle);
+void initVector(struct positions *game, int angle);
 
 #endif	// LUT_H
 

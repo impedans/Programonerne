@@ -11,8 +11,10 @@ struct positions{
   int height;
   int ballX;
   int ballY;
-  int speedX;
-  int speedY;
+  long speedX;
+  long speedY;
+  long vectorX;
+  long vectorY;
   int ballAngle;
   int strikerCenter;
   short block[150][50];

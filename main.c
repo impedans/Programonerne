@@ -105,8 +105,8 @@ void main(){
 
 
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
-	
-	
+
+
 	LEDinit();    //flydt timeren i sin egen funktion!!
 	cleanscreen();
 	gameInitial(&game1);

@@ -3,6 +3,7 @@
 #include "game.h"
 #include "ansi.h"
 #include "gpio.h"
+#include "lut.h"
 
 
 void gameInitial(struct positions *game){
@@ -28,7 +29,7 @@ void gameInitial(struct positions *game){
   // draw ball
   (*game).ballX = height - 1;
   (*game).ballY = (*game).strikerCenter;
-  (*game).ballAngle = 128;
+  (*game).ballAngle = 0;
 
   drawBall((*game).ballX,(*game).ballY);
 
@@ -76,45 +77,70 @@ void gameInitial(struct positions *game){
 
 void nextPosition(struct positions *game, int BallTime){
   int i;
+  int angleLimit = 512;
   /*------------------------------Ball position------------------------------------------*/
   if(BallTime == 1){
-     deleteCharacter((*game).ballX,(*game).ballY);
-  	(*game).ballX = (*game).ballX + (*game).speedX;
-    (*game).ballY = (*game).ballY + (*game).speedY;
+    //deleteCharacter((*game).ballX  >> 2,(*game).ballY  >> 2);
+	//initVector(game,(*game).ballAngle);
+  	(*game).ballX = (*game).ballX + (*game).speedX ;
+    (*game).ballY = (*game).ballY + (*game).speedY ;
+	//printf("Anfdfnn %d . %d   :    ", (*game).ballX >> 2, (*game).ballY >> 2);
+	//printf("Anfdfnn %d . %d   :    ", (*game).speedX >> 2, (*game).speedY >> 2);
+    //(*game).ballAngle = 0;
 
-    if((*game).ballX <= 1){													                  //Hit top
+    if(((*game).ballX >> 4) <= 1){													                  //Hit top
        (*game).speedX *= -1;
-       (*game).ballX = 2;                                             //EDIT: returns ball to fiels
-    } if ((*game).ballY <= 1 || (*game).ballY >= (*game).length*3){		//Hit sides (EDIT: runs every time)
+       (*game).ballX = 2 << 4;                                             //EDIT: returns ball to fiels
+    }
+
+    if (((*game).ballY >> 4) <= 1 || ((*game).ballY >> 4) >= (*game).length*3){		//Hit sides (EDIT: runs every time)
        (*game).speedY *= -1;
-       if((*game).ballY <= 1){                                        //EDIT: if/else that returns ball to field
-         (*game).ballY = 2;
+       if(((*game).ballY >> 4) <= 1){                                        //EDIT: if/else that returns ball to field
+         (*game).ballY = 2 << 4;
        } else {
-         (*game).ballY = (*game).length*3-1;
+         (*game).ballY = (*game).length*3-1 << 4;
        }
 
-    } else if ((*game).ballX == (*game).height-1 && ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter+8)){
-		if((*game).ballY > (*game).strikerCenter-1 && (*game).ballY < (*game).strikerCenter+1){
+    }
+
+    if (((*game).ballX >> 4) == (*game).height-1 && (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter+8)){
+		if(((*game).ballY >> 4) > (*game).strikerCenter-1 && ((*game).ballY >> 4) < (*game).strikerCenter+1){
           (*game).speedX *= -1;
+		  //(*game).vectorX *= -1;
 
-		} else if ((*game).ballY > (*game).strikerCenter-4 && (*game).ballY < (*game).strikerCenter-1){
-      (*game).speedX *= -1;
-		  (*game).speedY--;
+		} else if (((*game).ballY >> 4) > (*game).strikerCenter-4 && ((*game).ballY >> 4) < (*game).strikerCenter-1){
+          (*game).speedX *= -1;
+		  //(*game).vectorX *= -1;
+        //if((*game).ballAngle > -angleLimit){
+		    initVector(game,-10);                            // her er lavet om !!!!!
+           
+        //}
+		} else if (((*game).ballY >> 4) > (*game).strikerCenter+1 && ((*game).ballY >> 4) < (*game).strikerCenter+4){
+          (*game).speedX *= -1;
+		  //(*game).vectorX *= -1;
+        //if((*game).ballAngle < angleLimit){
+            initVector(game,10);                            // her er lavet om !!!!!
+		  
+        //}
 
-		} else if ((*game).ballY > (*game).strikerCenter+1 && (*game).ballY < (*game).strikerCenter+4){
-      (*game).speedX *= -1;
-		  (*game).speedY++;
-
-		} else if ((*game).ballY > (*game).strikerCenter-8 && (*game).ballY < (*game).strikerCenter-4){
-      (*game).speedX *= -1;
-		  (*game).speedY -= 2;
+		} else if (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter-4){
+          (*game).speedX *= -1;
+		  //(*game).vectorX *= -1;
+   //   if((*game).ballAngle > -angleLimit){
+          initVector(game,-10);                            // her er lavet om !!!!!
+		 
+   //   }
 
 		} else {
 		  (*game).speedX *= -1;
-		  (*game).speedY += 2;
+		  //(*game).vectorX *= -1;
+   //       if((*game).ballAngle > angleLimit){
+            initVector(game,10);                            // her er lavet om !!!!!
+		    
+     //     }
 		}
 
-    }else if((*game).ballX > (*game).height){																//Out of bounds
+    }else if(((*game).ballX >> 4) >= (*game).height){																//Out of bounds
       (*game).lives--;
       drawFlag((*game).lives);
       drawInfo(game);
@@ -137,8 +163,11 @@ void nextPosition(struct positions *game, int BallTime){
 	     }
        releaseBall(game);
      }
-     drawBall((*game).ballX,(*game).ballY);
-   }
+     //printf("BNnjnfjsdf  %d . %d", (*game).ballX >> 2, (*game).ballY >> 2);
+     drawBall(((*game).ballX) >> 4,((*game).ballY) >> 4);
+	 gotoxy(0,0);
+     printf("Venn: %d %d", (*game).ballX, (*game).ballY);
+ }
 
   /*------------------------------Striker position------------------------------------------*/
   if((readkey() & 0x08) == 0 && (*game).strikerCenter > 9){
@@ -160,6 +189,9 @@ void releaseBall(struct positions *game){
   (*game).speedX = 0;
   (*game).speedY = 0;
   drawBall((*game).ballX,(*game).ballY);
+  (*game).ballX = (*game).ballX << 4;
+  (*game).ballY = (*game).ballY << 4;
+ // printf("%d . %d", (*game).ballX >> 4, (*game).ballY >> 4);
 
   for(i = -7; i <= 7; i++){
       deleteCharacter((*game).height, (*game).strikerCenter-i);   //Deletes old striker
@@ -169,8 +201,10 @@ void releaseBall(struct positions *game){
 
   while(1){                                                       //Restarts game
      if((readkey() & 0x40)==0){
-       (*game).speedX = -1;
-       (*game).speedY = 1;
+       (*game).speedX = -1 << 4;
+       (*game).speedY = 1 << 4;
+	   (*game).vectorX = -1;
+       (*game).vectorY = 1;
 	   break;
      }
   }

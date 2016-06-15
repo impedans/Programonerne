@@ -9,7 +9,7 @@
 #include <sio.h>
 #include "lut.h"
 #include "ansi.h"
-
+#include "game.h"
 
 // -----------------------------------------------------------------------
 // SIN: a 512 long LUT of 16bit values in 2.14 format
@@ -110,12 +110,16 @@ signed short cos(int i){
 	return sin(i+128);
 }
 
-void initVector(struct TVector *v, int angle){
-	long tempX = (*v).x << FIX14_SHIFT;
-	long tempY = (*v).y << FIX14_SHIFT;
+void initVector(struct positions *game, int angle){
+	long tempX = (*game).vectorX << FIX14_SHIFT;
+	long tempY = (*game).vectorY << FIX14_SHIFT;
 	long tempCos = cos(angle);
 	long tempSin = sin(angle);
-
-	v->x= (FIX14_MULT(tempX,tempCos)) - (FIX14_MULT(tempY,tempSin));
-	v->y= (FIX14_MULT(tempX,tempSin)) + (FIX14_MULT(tempY,tempCos));
+	
+	//(*game).speedX = ((*game).speedX << 14);
+	//(*game).speedY = ((*game).speedY << 14);
+	(*game).vectorX = (FIX14_MULT(tempX,tempCos)) - (FIX14_MULT(tempY,tempSin));			
+	(*game).vectorY = (FIX14_MULT(tempX,tempSin)) + (FIX14_MULT(tempY,tempCos));
+	(*game).speedX = (FIX14_MULT(tempX,tempCos)) - (FIX14_MULT(tempY,tempSin)) >> 10;			// her er lavet om !!!!!
+	(*game).speedY = (FIX14_MULT(tempX,tempSin)) + (FIX14_MULT(tempY,tempCos)) >> 10;     // her er lavet om !!!!!
 }

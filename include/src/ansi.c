@@ -195,7 +195,7 @@ void gameWindow(int x1, int y1, int x2, int y2){ //, char[] title)
 void drawStriker(int strikerCenter, int height){
   gotoxy(height, strikerCenter - 7);
   //printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",60,61,61,61,61,61,61,61,61,61,61,61,61,61,62);
-  color(0,1);
+  color(1,15);
   printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",178,178,178,178,178,178,178,178,178,178,178,178,178,178,178);
   resetbgcolor();
 
@@ -205,10 +205,10 @@ void drawBall(int x,int y){
   //int i;
   gotoxy(x,y);
   if(x%2==0){
-    printf("%c",124);
+    printf("%c",48); //124
 	//i=0;
   } else{
-    printf("%c",88);
+    printf("%c",48);  //88
 	//i=1;
   }
   //printf("%c",48);
@@ -225,33 +225,22 @@ void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){
 	int i, j;
 	gotoxy(x1,y1);
 
-	/*for(i = x1; i<=x2; i++){
- 		for(j = y1; j<=y2; j++){
-			block[i][j] = 1;
-		}
-	}*/
 
-//	printf("%c", 218);
 	for(i = 0 ; i < x2-x1+1 ; i++){
 		printf("%c",219);
 	}
-//	printf("%c\n", 191);
 
-	for (i = 1; i <= (y2-y1)+1; i++){
+	/*for (i = 1; i <= (y2-y1)+1; i++){
 		gotoxy(x1+i,y1);
-	//	printf("%c", 179);
 		for(j = 0; j < x2-x1+1; j++){
 			printf("%c", 219);
 		}
-	//	printf("%c\n", 179);
-	}
+	}*/
 
-	gotoxy(y2,x1);
-	//printf("%c", 192);
+	/*gotoxy(y2,x1);
 	for(i=0 ; i < x2-x1+1; i++){
 		printf("%c",219);
-	}
-//	printf("%c", 217);
+	}*/
 
 }
 
