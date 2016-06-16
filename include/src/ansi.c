@@ -221,27 +221,38 @@ void deleteCharacter(int x,int y){
 
 //#endif /*! _ANSI_H_ */
 
-void drawBlock(int x1, int y1, int x2, int y2, short block[150][50]){
-	int i, j;
-	gotoxy(x1,y1);
-
-
-	for(i = 0 ; i < x2-x1+1 ; i++){
-		printf("%c",219);
-	}
-
-	/*for (i = 1; i <= (y2-y1)+1; i++){
-		gotoxy(x1+i,y1);
-		for(j = 0; j < x2-x1+1; j++){
-			printf("%c", 219);
-		}
-	}*/
-
-	/*gotoxy(y2,x1);
-	for(i=0 ; i < x2-x1+1; i++){
-		printf("%c",219);
-	}*/
-
+void drawBlock(int x1, int y1, short N, struct positions *game){
+  short i = 0, j = 0;
+	//printf("This is N: %d, And this is: %d", N, (*game).block[N][2]);
+  (*game).block[N][0]=x1;
+  (*game).block[N][1]=y1;
+  if((*game).block[N][2] == 0){
+	for(i = 0 ; i < 3 ; i++){
+      gotoxy(x1+i, y1);
+      printf("%c%c%c",32,32,32);
+	  (*game).block[N][0]=-1;
+      (*game).block[N][1]=-1;
+    }
+  } else if((*game).block[N][2] == 1){
+    for(i = 0 ; i < 3 ; i++){
+	  color(3,0);
+      gotoxy(x1+i, y1);
+      printf("%c%c%c",219,219,219);
+    }
+  } else if((*game).block[N][2] == 2){
+    for(i = 0 ; i < 3 ; i++){
+	  color(5,0);
+      gotoxy(x1+i, y1);
+      printf("%c%c%c",219,219,219);
+    }
+  } else if((*game).block[N][2] == 3){
+    for(i = 0 ; i < 3 ; i++){
+	  color(7,0);
+      gotoxy(x1+i, y1);
+      printf("%c%c%c",219,219,219);
+    }
+  }
+  color(15,0);
 }
 
 void drawInfo(struct positions *game){

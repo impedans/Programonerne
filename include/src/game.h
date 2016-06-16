@@ -17,7 +17,7 @@ struct positions{
   long vectorY;
   int ballAngle;
   int strikerCenter;
-  short block[150][50];
+  short block[20][3];
 };
 
 

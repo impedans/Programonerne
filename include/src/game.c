@@ -7,7 +7,7 @@
 
 
 void gameInitial(struct positions *game){
-  int i, j;
+  short i = 0, j = 0;
   int length = (*game).length * 3;
   int height = (*game).height;
   //blocks array that holds ccordinates and lives
@@ -34,7 +34,7 @@ void gameInitial(struct positions *game){
   drawBall((*game).ballX,(*game).ballY);
 
   //set amount of lives, write info text
-  (*game).lives = 3;
+  (*game).lives = 5;
   gotoxy(55,10);
   printf("Lives: ");
   (*game).points = 0;
@@ -56,30 +56,219 @@ void gameInitial(struct positions *game){
   color(15,0);
 
   // draw Blocks
-  ////////////////LEVEL 1/////////////////////////////////////
-
-  //drawBlock(10,10,20,20, (*game).block);       //block varable initialatation
-
-  /*drawBlock(10,20,30,30);
-  drawBlock(10,30,40,40);
-  drawBlock(10,40,50,50);
-  drawBlock(10,50,60,60);
-  drawBlock(10,60,70,70);
-  drawBlock(10,70,80,80);
-  drawBlock(10,80,90,90);
-  drawBlock(10,90,100,100);
-  drawBlock(10,100,110,110);
-  drawBlock(10,110,120,120);
-  drawBlock(10,120,130,130);
-  drawBlock(10,130,140,140);*/
+  if(1 == 1){
+    //Level 1//
+    for(i = 0; i < 8; i++){
+      (*game).block[i][2] = 3;
+    }
+      drawBlock(3, 3 ,0 ,game);
+      drawBlock(9, 9 ,1 ,game);
+      drawBlock(18, 18 ,2 ,game);
+      drawBlock(30, 30 ,3 ,game);
+      drawBlock(30, 50 ,4 ,game);
+      drawBlock(20, 60 ,5 ,game);
+      //drawBlock(3, 19 ,6 ,game);
+      //drawBlock(3, 22 ,7 ,game);
+  }
 
 }
 
 void nextPosition(struct positions *game, int BallTime){
-  int i;
+  short i = 0, j = 0, l = 0, v = 0, N = 8;
   int angleLimit = 512;
   /*------------------------------Ball position------------------------------------------*/
   if(BallTime == 1){
+	(*game).ballX = (*game).ballX >> 4;
+	(*game).ballY = (*game).ballY >> 4;
+	deleteCharacter((*game).ballX,(*game).ballY);
+	//printf("%d,%d", (*game).ballX,(*game).ballY);
+	if((*game).speedX > 0 && (*game).speedY > 0){         //SE
+  for(i=0; i < N; i++){
+    for(j = 0; j < 3; j++){
+      if((*game).ballY + 1 == (*game).block[i][1] + j && (*game).ballX + 1 == (*game).block[i][0]){
+        v++;
+      }
+      if((*game).ballX + 1 == (*game).block[i][0] + j && (*game).ballY + 1 == (*game).block[i][1]){
+        l++;
+      }
+    }
+      
+      if(l == v && l > 0){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (l > v){
+	    l = 0, v = 0;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (v > l){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      }
+  }
+} else if((*game).speedX < 0 && (*game).speedY > 0) { //NE
+//printf("I twas here");
+  for( i = 0; i < N; i++){
+    for(j = 0; j < 3; j++){
+	//gotoxy(0,0);
+	//printf("Der var %d og der var %d", (*game).ballY + 1, (*game).block[i][1] + j);
+      if((*game).ballY + 1 == (*game).block[i][1] + j && (*game).ballX - 1 == (*game).block[i][0] + 2){
+        v++;
+		//printf("argh! jo");
+      }
+      if((*game).ballX - 1 == (*game).block[i][0] + j && (*game).ballY + 1 == (*game).block[i][1]){
+        l++;
+		//printf("argh! jo");
+      }
+    }
+
+      if(l == v && l > 0){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (l > v){
+	    l = 0, v = 0;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (v > l){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      }
+  }
+
+} else if((*game).speedX > 0 && (*game).speedY < 0){  						//SW
+
+  for( i = 0; i < N; i++){
+    for (j = 0; j < 3; j++){
+	//gotoxy(0,0);
+	//printf("A: %d og B: %d",(*game).ballX + 1 , (*game).block[5][0] + j);
+      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX + 1 == (*game).block[i][0]){
+        v++;
+		//gotoxy(0,0);
+		//printf("vennn\n");
+      }
+      if((*game).ballX + 1 == (*game).block[i][0] + j && (*game).ballY - 1 == (*game).block[i][1] + 2){
+        l++;
+		//gotoxy(1,1);
+		//printf("vennnl\n");
+		//(*game).speedY *= -1;
+      }
+    }
+
+      if(l == v && l > 0){
+	  	l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (l > v){
+	    l = 0, v = 0;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (v > l){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      }
+  }
+
+} else if ((*game).speedX < 0 && (*game).speedY < 0) {                                              //NW
+  for( i = 0; i < N; i++){
+    for (j = 0; j < 3; j++){
+      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX - 1 == (*game).block[i][0] + 2){
+        v++;
+      }
+      if((*game).ballX - 1 == (*game).block[i][0] + j && (*game).ballY - 1 == (*game).block[i][0] + 2){
+        l++;
+      }
+    }
+
+      if(l == v && l > 0){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (l > v){
+	    l = 0, v = 0;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (v > l){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      }
+  }
+} else if ((*game).speedX < 0 && (*game).speedY == 0){                                                                                      // North
+  for (i = 0; i < N; i++){
+    for (j = 0; j < 3; j++){
+      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX == (*game).block[i][0] + 2){
+        v++;
+      }
+    }
+
+      if(l == v && l > 0){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (l > v){
+	    l = 0, v = 0;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (v > l){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      }
+  }
+
+} else {
+  for (i = 0; i < N; i++){                                                                         //South
+    for (j = 0; j < 3; j++){
+      if((*game).ballY + 1 == (*game).block[i][1] + j && (*game).ballX == (*game).block[i][0]){
+        v++;
+      }
+
+      if(l == v && l > 0){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (l > v){
+	    l = 0, v = 0;
+        (*game).speedY *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      } else if (v > l){
+	    l = 0, v = 0;
+        (*game).speedX *= -1;
+        (*game).block[i][2]--;
+        drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+      }
+    }
+  }
+}
+	(*game).ballX = (*game).ballX << 4;
+	(*game).ballY = (*game).ballY << 4;
     //deleteCharacter((*game).ballX  >> 2,(*game).ballY  >> 2);
 	//initVector(game,(*game).ballAngle);
   	(*game).ballX = (*game).ballX + (*game).speedX ;
@@ -112,14 +301,14 @@ void nextPosition(struct positions *game, int BallTime){
           (*game).speedX *= -1;
 		  //(*game).vectorX *= -1;
         //if((*game).ballAngle > -angleLimit){
-		    initVector(game,-10);                            // her er lavet om !!!!!
+		   // initVector(game,-10);                            // her er lavet om !!!!!
            
         //}
 		} else if (((*game).ballY >> 4) > (*game).strikerCenter+1 && ((*game).ballY >> 4) < (*game).strikerCenter+4){
           (*game).speedX *= -1;
 		  //(*game).vectorX *= -1;
         //if((*game).ballAngle < angleLimit){
-            initVector(game,10);                            // her er lavet om !!!!!
+          //  initVector(game,10);                            // her er lavet om !!!!!
 		  
         //}
 
@@ -127,7 +316,7 @@ void nextPosition(struct positions *game, int BallTime){
           (*game).speedX *= -1;
 		  //(*game).vectorX *= -1;
    //   if((*game).ballAngle > -angleLimit){
-          initVector(game,-10);                            // her er lavet om !!!!!
+         // initVector(game,-10);                            // her er lavet om !!!!!
 		 
    //   }
 
@@ -135,7 +324,7 @@ void nextPosition(struct positions *game, int BallTime){
 		  (*game).speedX *= -1;
 		  //(*game).vectorX *= -1;
    //       if((*game).ballAngle > angleLimit){
-            initVector(game,10);                            // her er lavet om !!!!!
+           // initVector(game,10);                            // her er lavet om !!!!!
 		    
      //     }
 		}
@@ -165,14 +354,14 @@ void nextPosition(struct positions *game, int BallTime){
      }
      //printf("BNnjnfjsdf  %d . %d", (*game).ballX >> 2, (*game).ballY >> 2);
      drawBall(((*game).ballX) >> 4,((*game).ballY) >> 4);
-	 gotoxy(0,0);
-     printf("Venn: %d %d", (*game).ballX, (*game).ballY);
+	// gotoxy(0,0);
+    // printf("Venn: %d %d", (*game).ballX, (*game).ballY);
  }
 
   /*------------------------------Striker position------------------------------------------*/
   if((readkey() & 0x08) == 0 && (*game).strikerCenter > 9){
     (*game).strikerCenter--;
-	  deleteCharacter((*game).height, (*game).strikerCenter+8);
+	 deleteCharacter((*game).height, (*game).strikerCenter+8);
     drawStriker((*game).strikerCenter, (*game).height);
   } else if((readkey() & 0x80) == 0 && (*game).strikerCenter < (*game).length*3-7){
     (*game).strikerCenter++;
