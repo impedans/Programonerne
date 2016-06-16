@@ -223,33 +223,45 @@ void deleteCharacter(int x,int y){
 
 void drawBlock(int x1, int y1, short N, struct positions *game){
   short i = 0, j = 0;
-	//printf("This is N: %d, And this is: %d", N, (*game).block[N][2]);
-  (*game).block[N][0]=x1;
+
+  (*game).block[N][0]=x1;				//Saves block start coordinates
   (*game).block[N][1]=y1;
-  if((*game).block[N][2] == 0){
-	for(i = 0 ; i < 3 ; i++){
+
+  if((*game).block[N][2] == 0){			//Lives = 0
+	for(i = 0 ; i < (*game).blockHeight ; i++){
       gotoxy(x1+i, y1);
-      printf("%c%c%c",32,32,32);
+	  for(j = 0; j < (*game).blockLength; j++){
+        printf("%c",32);                      //Eventuelt prøv 127, der iflg ascii-codes.com er "delete"
+	  }
+
 	  (*game).block[N][0]=-1;
       (*game).block[N][1]=-1;
+	  (*game).points += 100;
+	  (*game).numBlocks--;
     }
-  } else if((*game).block[N][2] == 1){
-    for(i = 0 ; i < 3 ; i++){
+  } else if((*game).block[N][2] == 1){	//Lives = 1
+    for(i = 0 ; i < (*game).blockHeight ; i++){
 	  color(3,0);
       gotoxy(x1+i, y1);
-      printf("%c%c%c",219,219,219);
+	  for(j = 0; j < (*game).blockLength; j++){
+        printf("%c",176);
+	  }
     }
-  } else if((*game).block[N][2] == 2){
-    for(i = 0 ; i < 3 ; i++){
+  } else if((*game).block[N][2] == 2){	//Lives = 2
+    for(i = 0 ; i < (*game).blockHeight ; i++){
 	  color(5,0);
       gotoxy(x1+i, y1);
-      printf("%c%c%c",219,219,219);
+      for(j = 0; j < (*game).blockLength; j++){
+        printf("%c",177);
+	  }
     }
-  } else if((*game).block[N][2] == 3){
-    for(i = 0 ; i < 3 ; i++){
+  } else if((*game).block[N][2] == 3){	//Lives = 3
+    for(i = 0 ; i < (*game).blockHeight ; i++){
 	  color(7,0);
       gotoxy(x1+i, y1);
-      printf("%c%c%c",219,219,219);
+      for(j = 0; j < (*game).blockLength; j++){
+        printf("%c",178);
+	  }
     }
   }
   color(15,0);

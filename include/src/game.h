@@ -5,9 +5,9 @@
 
 struct positions{
   int length;
-  int lives;
+  short lives;
   int points;
-  int level;
+  short level;
   int height;
   int ballX;
   int ballY;
@@ -15,6 +15,9 @@ struct positions{
   long speedY;
   long vectorX;
   long vectorY;
+  short numBlocks;
+  short blockLength;
+  short blockHeight;
   int ballAngle;
   int strikerCenter;
   short block[20][3];
