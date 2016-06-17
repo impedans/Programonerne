@@ -2,7 +2,7 @@
 #include <sio.h>             // special encore serial i/o routines
 #include <string.h>
 #include "game.h"
-
+void drawInfo(struct positions *game);
 //#ifndef _ANSI_H_
 //#define _ANSI_H_
 
@@ -224,8 +224,11 @@ void deleteCharacter(int x,int y){
 void drawBlock(int x1, int y1, short N, struct positions *game){
   short i = 0, j = 0;
 
-  (*game).block[N][0]=x1;				//Saves block start coordinates
-  (*game).block[N][1]=y1;
+  (*game).block[N][0] = x1;				//Saves block start coordinates
+  (*game).block[N][1] = y1;
+
+  //gotoxy(0,70);
+  //printf("I really was here maaan   %d", N);
 
   if((*game).block[N][2] == 0){			//Lives = 0
 	for(i = 0 ; i < (*game).blockHeight ; i++){
@@ -233,12 +236,11 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 	  for(j = 0; j < (*game).blockLength; j++){
         printf("%c",32);                      //Eventuelt prøv 127, der iflg ascii-codes.com er "delete"
 	  }
-
-	  (*game).block[N][0]=-1;
-      (*game).block[N][1]=-1;
-	  (*game).points += 100;
-	  (*game).numBlocks--;
     }
+	(*game).block[N][0] = -10;
+    (*game).block[N][1] = -10;
+	(*game).points     += 100;
+	//(*game).numBlocks--;
   } else if((*game).block[N][2] == 1){	//Lives = 1
     for(i = 0 ; i < (*game).blockHeight ; i++){
 	  color(3,0);
@@ -247,24 +249,30 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
         printf("%c",176);
 	  }
     }
+
+	(*game).points += 75;
   } else if((*game).block[N][2] == 2){	//Lives = 2
     for(i = 0 ; i < (*game).blockHeight ; i++){
-	  color(5,0);
+	  color(15,0);
       gotoxy(x1+i, y1);
       for(j = 0; j < (*game).blockLength; j++){
         printf("%c",177);
 	  }
     }
+	
+	(*game).points += 50;
   } else if((*game).block[N][2] == 3){	//Lives = 3
     for(i = 0 ; i < (*game).blockHeight ; i++){
-	  color(7,0);
+	  color(8,0);
       gotoxy(x1+i, y1);
       for(j = 0; j < (*game).blockLength; j++){
         printf("%c",178);
 	  }
     }
   }
+  
   color(15,0);
+  drawInfo(game);
 }
 
 void drawInfo(struct positions *game){

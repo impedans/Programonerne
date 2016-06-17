@@ -50,14 +50,14 @@ void gameInitial(struct positions *game){
       deleteCharacter(55+i,113+j);
     }
   }
-  color(15,0);
+  color(15,0);											//SW(TOP bounce ~ side igennem)    SE virker    NE god men sletter     NW sletter
 
   // draw Blocks
   (*game).blockHeight = 3;
   (*game).blockLength = 3;
   if((*game).level == 1){
     //Level 1//
-	  (*game).numBlocks = 6;
+	  (*game).numBlocks = 17;
     for(i = 0; i < (*game).numBlocks; i++){
       (*game).block[i][2] = 3;
     }
@@ -66,8 +66,20 @@ void gameInitial(struct positions *game){
     drawBlock(18, 18 ,2 ,game);
     drawBlock(30, 30 ,3 ,game);
     drawBlock(30, 50 ,4 ,game);
-    drawBlock(20, 60 ,5 ,game);
-  }
+    drawBlock(30, 60 ,5 ,game);
+	drawBlock(30, 100 ,6 ,game);
+    drawBlock(40, 120 ,7 ,game);
+	drawBlock(40, 130 ,8 ,game);
+	drawBlock(20, 73 ,9 ,game);
+	drawBlock(20, 90 ,10 ,game);
+	drawBlock(20, 60 ,11 ,game);
+	drawBlock(10, 140 ,12 ,game);
+	drawBlock(15, 30 ,13 ,game);
+	drawBlock(20, 50 ,14 ,game);
+	drawBlock(20, 10 ,15 ,game);
+	drawBlock(40, 120 ,16 ,game);
+	drawBlock(20, 135 ,17 ,game);
+	}
 
 }
 
@@ -80,18 +92,19 @@ void nextPosition(struct positions *game, int BallTime){
 	(*game).ballY = (*game).ballY >> 4;
 	deleteCharacter((*game).ballX,(*game).ballY);
 	if((*game).speedX > 0 && (*game).speedY > 0){         //SE
-  for(i=0; i < (*game).numBlocks; i++){//For loop runs through blocks
+  for(i = 0; i < (*game).numBlocks; i++){//For loop runs through blocks
     for(j = 0; j < (*game).blockLength; j++){
       if((*game).ballY + 1 == (*game).block[i][1] + j && (*game).ballX + 1 == (*game).block[i][0]){
         v++;
       }
-	//}
-	//for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
+	}
+	for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
       if((*game).ballX + 1 == (*game).block[i][0] + j && (*game).ballY + 1 == (*game).block[i][1]){
         l++;
       }
 	}
-
+		
+		
       if(l == v && l > 0){
         (*game).speedX *= -1;
         (*game).speedY *= -1;
@@ -111,11 +124,11 @@ void nextPosition(struct positions *game, int BallTime){
 } else if((*game).speedX < 0 && (*game).speedY > 0) { //NE
   for( i = 0; i < (*game).numBlocks; i++){
     for(j = 0; j < (*game).blockLength; j++){
-      if((*game).ballY + 1 == (*game).block[i][1] + j && (*game).ballX - 1 == (*game).block[i][0] + 2){
+      if((*game).ballY + 1 == (*game).block[i][1] + j && (*game).ballX - 1 == (*game).block[i][0] + (*game).blockHeight-1){
         v++;
       }
-	//}
-	//for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
+	}
+	for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
       if((*game).ballX - 1 == (*game).block[i][0] + j && (*game).ballY + 1 == (*game).block[i][1]){
         l++;
       }
@@ -143,16 +156,20 @@ void nextPosition(struct positions *game, int BallTime){
 
   for( i = 0; i < (*game).numBlocks; i++){
     for (j = 0; j < (*game).blockLength; j++){
-      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX + 1 == (*game).block[i][0]){
+      if((*game).ballY - 1 == (*game).block[i][1] + j && ((*game).ballX + 1 == (*game).block[i][0])){
         v++;
+	  	//gotoxy(0,0);
+		//printf("v: %d", v);
       }
-    //}
-	//for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
-        if((*game).ballX + 1 == (*game).block[i][0] + j && (*game).ballY - 1 == (*game).block[i][1] + 2){
+    }
+	for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
+        if((*game).ballX + 1 == (*game).block[i][0] + j && (*game).ballY - 1 == ((*game).block[i][1] + (*game).blockLength-1)){
           l++;
+		 // gotoxy(0,7);
+		 // printf("l: %d", l);
         }
 	}
-  }
+  
 
       if(l == v && l > 0){
         (*game).speedX *= -1;
@@ -169,22 +186,20 @@ void nextPosition(struct positions *game, int BallTime){
         drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
       }
 	  l = 0, v = 0;
-
+}
 
 } else if ((*game).speedX < 0 && (*game).speedY < 0) {                                              //NW
   for( i = 0; i < (*game).numBlocks; i++){
     for (j = 0; j < (*game).blockLength; j++){
-      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX - 1 == (*game).block[i][0] + 2){
+      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX - 1 == (*game).block[i][0] + (*game).blockHeight-1){
         v++;
       }
-	//}
-	//for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
-      if((*game).ballX - 1 == (*game).block[i][0] + j && (*game).ballY - 1 == (*game).block[i][0] + 2){
+	}
+	for(j = 0; j < (*game).blockHeight; j++){					//Ready if blockHeight != blockLength
+      if((*game).ballX - 1 == (*game).block[i][0] + j && (*game).ballY - 1 == (*game).block[i][1] + (*game).blockLength-1){
         l++;
       }
 	}
-
-
       if(l == v && l > 0){
         (*game).speedX *= -1;
         (*game).speedY *= -1;
@@ -204,7 +219,7 @@ void nextPosition(struct positions *game, int BallTime){
 } else if ((*game).speedX < 0 && (*game).speedY == 0){                                                                                      // North
   for (i = 0; i < (*game).numBlocks; i++){
     for (j = 0; j < (*game).blockHeight; j++){
-      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX == (*game).block[i][0] + 2){
+      if((*game).ballY - 1 == (*game).block[i][1] + j && (*game).ballX == (*game).block[i][0] + (*game).blockHeight-1){
         v++;
       }
     }
@@ -279,6 +294,7 @@ void nextPosition(struct positions *game, int BallTime){
     if (((*game).ballX >> 4) == (*game).height-1 && (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter+8)){
 		if(((*game).ballY >> 4) > (*game).strikerCenter-1 && ((*game).ballY >> 4) < (*game).strikerCenter+1){
           (*game).speedX *= -1;
+		  //(*game).speedY *= -1;
 		  //(*game).vectorX *= -1;
 
 		} else if (((*game).ballY >> 4) > (*game).strikerCenter-4 && ((*game).ballY >> 4) < (*game).strikerCenter-1){
@@ -290,6 +306,7 @@ void nextPosition(struct positions *game, int BallTime){
         //}
 		} else if (((*game).ballY >> 4) > (*game).strikerCenter+1 && ((*game).ballY >> 4) < (*game).strikerCenter+4){
           (*game).speedX *= -1;
+		  //(*game).speedY *= -1;
 		  //(*game).vectorX *= -1;
         //if((*game).ballAngle < angleLimit){
           //  initVector(game,10);                            // her er lavet om !!!!!
@@ -298,6 +315,7 @@ void nextPosition(struct positions *game, int BallTime){
 
 		} else if (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter-4){
           (*game).speedX *= -1;
+		  //(*game).speedY *= -1;
 		  //(*game).vectorX *= -1;
    //   if((*game).ballAngle > -angleLimit){
          // initVector(game,-10);                            // her er lavet om !!!!!
@@ -306,6 +324,7 @@ void nextPosition(struct positions *game, int BallTime){
 
 		} else {
 		  (*game).speedX *= -1;
+		  //(*game).speedY *= -1;
 		  //(*game).vectorX *= -1;
    //       if((*game).ballAngle > angleLimit){
            // initVector(game,10);                            // her er lavet om !!!!!
@@ -352,6 +371,7 @@ void nextPosition(struct positions *game, int BallTime){
     deleteCharacter((*game).height, (*game).strikerCenter-8);
     drawStriker((*game).strikerCenter, (*game).height);
   }
+
 }
 
 void releaseBall(struct positions *game){
@@ -375,9 +395,9 @@ void releaseBall(struct positions *game){
   while(1){                                                       //Restarts game
      if((readkey() & 0x40)==0){
        (*game).speedX = -1 << 4;
-       (*game).speedY = 1 << 4;
+       (*game).speedY = -1 << 4;
 	   (*game).vectorX = -1;
-       (*game).vectorY = 1;
+       (*game).vectorY = -1;
 	   break;
      }
   }
