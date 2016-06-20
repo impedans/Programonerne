@@ -10,11 +10,13 @@ struct positions{
 	int points;
 	int level;
 	int height;
-	int ballX;
-	int ballY;
-	long speedX;
-	long speedY;
-	long hitTest;
+	short ballX;
+	short ballY;
+	short oldBallX;
+	short oldBallY;
+	short speedX;
+	short speedY;
+	short hitTest;
 	int ballAngle;
 	int strikerCenter;
 	short numBlocks;

@@ -30,6 +30,7 @@ void timer0int(){
 void LEDinit(){
 	PEDD  = 0x00;
 	PGDD  = 0x00;
+	PEOUT &= 0x00;
 
 	DI(); // dissable timer
 
@@ -47,6 +48,8 @@ void LEDinit(){
 	SET_VECTOR(TIMER0, timer0int);
 
 	EI(); // enable timer
+
+	//PFDD   = 0xC0;
 }
 
 
@@ -55,11 +58,14 @@ void main(){
 	int ballTimer;
 	game1.length = 50;
 	game1.height = 50;
+	game1.level  = 1;
+	game1.points = 0;
+
 
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
 
 	LEDinit();    //flydt timeren i sin egen funktion!!
-	cleanscreen();
+	game1.lives = 3;
 	gameInitial(&game1);
 	releaseBall(&game1);
 	

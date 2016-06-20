@@ -131,10 +131,10 @@ void drawBall(int x,int y){
 	//int i;
 	gotoxy(x,y);
 	if(x%2==0){
-		printf("%c",48); //124
+		printf("%c",88); //124
 		//i=0;
 	} else{
-		printf("%c",48);  //88
+		printf("%c",88);  //88
 		//i=1;
 	}
 	//printf("%c",48);
@@ -155,22 +155,50 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 	//printf("I really was here maaan   %d", N);
 
 	if((*game).block[N][2] == 0){			//Lives = 0
+		PEOUT = 0x20;
+
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			gotoxy(x1+i, y1);
 			for(j = 0; j < (*game).blockLength; j++){
-				printf("%c",32);                      //Eventuelt prøv 127, der iflg ascii-codes.com er "delete"
+				printf("%c",32);
 			}
 		}
 		(*game).block[N][0] = -10;
 		(*game).block[N][1] = -10;
 		(*game).points     += 100;
+		j = 0;
+		for(i = 0; i < (*game).numBlocks; i++){
+			if((*game).block[i][0] == -10){
+				j++;
+			}
+			
+			if(j == (*game).numBlocks){
+				(*game).level++;
+				PEOUT = 0x40;
+				drawInfo(game);
+				for(i = -7; i <= 7; i++){
+					deleteCharacter((*game).height, (*game).strikerCenter-i);
+				}
+				gotoxy(55, 50);
+				while(1){
+					if((readkey() & 0x80)==0){
+						for(i=0; i <= 46; i++){
+							deleteCharacter(55, 50+i);
+						}
+						break;
+					}
+				}
+				gameInitial(game);
+				releaseBall(game);	
+			}
+		}
 		//(*game).numBlocks--;
 	} else if((*game).block[N][2] == 1){	//Lives = 1
 		for(i = 0 ; i < (*game).blockHeight ; i++){
-			color(3,0);
+			color(4,0);
 			gotoxy(x1+i, y1);
 			for(j = 0; j < (*game).blockLength; j++){
-				printf("%c",176);
+				printf("%c",177);
 			}
 		}
 		(*game).points += 75;
@@ -179,16 +207,16 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 			color(15,0);
 			gotoxy(x1+i, y1);
 			for(j = 0; j < (*game).blockLength; j++){
-				printf("%c",177);
+				printf("%c",178);
 			}
 		}
 		(*game).points += 50;
 	} else if((*game).block[N][2] == 3){	//Lives = 3
 		for(i = 0 ; i < (*game).blockHeight ; i++){
-			color(8,0);
+			color(1,0);
 			gotoxy(x1+i, y1);
 			for(j = 0; j < (*game).blockLength; j++){
-				printf("%c",178);
+				printf("%c",219);
 			}
 		}
 	} 

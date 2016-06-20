@@ -13,6 +13,8 @@ void gameInitial(struct positions *game){
 	int length = (*game).length * 3;
 	int height = (*game).height;
 
+	cleanscreen();
+
 	if ((length > XMAX * 3 || length < 0) || ( height > YMAX || height < 0)){
 		printf("ERROR\n");
 		return;
@@ -32,13 +34,13 @@ void gameInitial(struct positions *game){
 	drawBall((*game).ballX,(*game).ballY);
 
 	//set amount of lives, write info text
-	(*game).lives = 3;
 	gotoxy(55,10);
 	printf("Lives: ");
-	(*game).points = 0;
+	(*game).lives = 3;
+	//(*game).points = 0;
 	gotoxy(56,10);
 	printf("Points: ");
-	(*game).level = 1;
+	//(*game).level = 1;
 	gotoxy(57,10);
 	printf("Level: ");
 	drawInfo(game);
@@ -54,38 +56,51 @@ void gameInitial(struct positions *game){
 	color(15,0);
   
     // draw Blocks
-	(*game).blockHeight = 4;
-	(*game).blockLength = 7;
+	(*game).blockHeight = 3;
+	(*game).blockLength = 13;
 	if((*game).level == 1){
 		//Level 1//
-		(*game).numBlocks = 17;
-		for(i = 0; i < (*game).numBlocks; i++){
+		(*game).numBlocks = 8;
+		for(i = 0; i < 8; i++){
 			(*game).block[i][2] = 3;
 		}
-		drawBlock(3, 3 ,0 ,game);
-		drawBlock(9, 9 ,1 ,game);
-		drawBlock(18, 18 ,2 ,game);
-		drawBlock(30, 30 ,3 ,game);
-		drawBlock(30, 50 ,4 ,game);
-		drawBlock(30, 60 ,5 ,game);
-		drawBlock(30, 100 ,6 ,game);
-		drawBlock(40, 120 ,7 ,game);
-		drawBlock(40, 130 ,8 ,game);
-		drawBlock(20, 73 ,9 ,game);
-		drawBlock(20, 90 ,10 ,game);
-		drawBlock(20, 60 ,11 ,game);
-		drawBlock(10, 140 ,12 ,game);
-		drawBlock(15, 30 ,13 ,game);
-		drawBlock(20, 50 ,14 ,game);
-		drawBlock(20, 10 ,15 ,game);
-		drawBlock(40, 120 ,16 ,game);
-		drawBlock(20, 135 ,17 ,game);
+		/*for(i = 8; i < 16; i++){
+			(*game).block[i][2] = 2;
+		}
+		for(i = 16; i < 24; i++){
+			(*game).block[i][2] = 1;
+		}*/
+		drawBlock(5, 15 ,0 ,game);
+		drawBlock(5, 31 ,1 ,game);
+		drawBlock(5, 47 ,2 ,game);
+		drawBlock(5, 63 ,3 ,game);
+		drawBlock(5, 79 ,4 ,game);
+		drawBlock(5, 95 ,5 ,game);
+		drawBlock(5, 111 ,6 ,game);
+		drawBlock(5, 127 ,7 ,game);
+
+	/*	drawBlock(10, 15 ,8 ,game);
+		drawBlock(10, 31 ,9 ,game);
+		drawBlock(10, 47 ,10 ,game);
+		drawBlock(10, 63 ,11 ,game);
+		drawBlock(10, 79 ,12 ,game);
+		drawBlock(10, 95 ,13 ,game);
+		drawBlock(10, 111 ,14 ,game);
+		drawBlock(10, 127 ,15 ,game);
+
+		drawBlock(15, 15 ,16 ,game);
+		drawBlock(15, 31 ,17 ,game);
+		drawBlock(15, 47 ,18 ,game);
+		drawBlock(15, 63 ,19 ,game);
+		drawBlock(15, 79 ,20 ,game);
+		drawBlock(15, 95 ,21 ,game);
+		drawBlock(15, 111 ,22 ,game);
+		drawBlock(15, 127 ,23 ,game);*/
 	}
 
 }
 
 void nextPosition(struct positions *game, int BallTime){
-	int oldBallX , oldBallY;
 	short i = 0, j = 0, l = 0, v = 0;
   
 	//gotoxy(0,0);																								//testing area
@@ -95,8 +110,8 @@ void nextPosition(struct positions *game, int BallTime){
 
 /*----------------------------------------------Ball position---------------------------------------------------------*/
 	  
-		oldBallX = (*game).ballX >> 4;						//save old ball position
-		oldBallY = (*game).ballY >> 4;
+		(*game).oldBallX = (*game).ballX >> 4;						//save old ball position
+		(*game).oldBallY = (*game).ballY >> 4;
 
 		(*game).ballX += (*game).speedX >> 10;				//set new ball position
 		(*game).ballY += (*game).speedY >> 10;
@@ -120,8 +135,10 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 + (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -130,7 +147,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 512 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest = 1;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -139,7 +158,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest = 1;
-					(*game).ballX     = oldBallX << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -166,8 +187,10 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 + (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -176,7 +199,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 512 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -185,7 +210,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -217,8 +244,10 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 + (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -227,7 +256,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 512 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -236,7 +267,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -263,8 +296,10 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 + (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -273,7 +308,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 512 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballY     = oldBallY << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -282,7 +319,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -294,8 +333,8 @@ void nextPosition(struct positions *game, int BallTime){
 			
 		} else if ((*game).speedX < 0 && (*game).speedY == 0){                                                                                      
 			for (i = 0; i < (*game).numBlocks; i++){
-				for (j = 0; j < (*game).blockHeight; j++){
-					if(((*game).ballY >> 4) == (*game).block[i][1] + j && oldBallX == (*game).block[i][0] + (*game).blockHeight-1){
+				for (j = 0; j < (*game).blockLength; j++){
+					if(((*game).ballY >> 4) == (*game).block[i][1] + j && ((*game).ballX >> 4) == (*game).block[i][0] + (*game).blockHeight){
 						v++;
 					}
 				}
@@ -305,7 +344,9 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).ballAngle = 256 - (*game).ballAngle;	   
 					(*game).ballAngle =(*game).ballAngle & 511;
 					(*game).hitTest   = 1;
-					(*game).ballX     = oldBallX << 4;
+					(*game).ballX     = (*game).oldBallX << 4;
+					PEOUT = 0x08;
+					PEOUT &= 0x00;
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -318,7 +359,7 @@ void nextPosition(struct positions *game, int BallTime){
 		} else {
 			for (i = 0; i < (*game).numBlocks; i++){                                                                         //South
 				for (j = 0; j < (*game).blockLength; j++){
-					if(((*game).ballY >> 4) == (*game).block[i][1] + j && oldBallX == (*game).block[i][0]){
+					if(((*game).ballY >> 4) == (*game).block[i][1] + j && ((*game).ballX >> 4) == (*game).block[i][0] - 1){
 						v++;
 					}
 					
@@ -327,7 +368,9 @@ void nextPosition(struct positions *game, int BallTime){
 						(*game).ballAngle = 256 - (*game).ballAngle;	   
 						(*game).ballAngle =(*game).ballAngle & 511;
 						(*game).hitTest   = 1;
-						(*game).ballX     = oldBallX << 4;
+						(*game).ballX     = (*game).oldBallX << 4;
+						PEOUT = 0x08;
+						PEOUT &= 0x00;
 					
 						(*game).block[i][2]--;
 						drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -339,6 +382,8 @@ void nextPosition(struct positions *game, int BallTime){
 			
 	/*---------------------------------------------Wall Tester---------------------------------------------------------*/	
 		if(((*game).ballX >> 4) <= 1){					//Hit top
+			PEOUT = 0x04;
+			PEOUT &= 0x00;
 			(*game).ballAngle = 256 - (*game).ballAngle;	   
 			(*game).ballAngle =(*game).ballAngle & 511;
 			(*game).ballX = 2 << 4;                       //Returns ball to fiels
@@ -346,6 +391,8 @@ void nextPosition(struct positions *game, int BallTime){
 		}
 		
 		if (((*game).ballY >> 4) <= 1 || ((*game).ballY >> 4) >= (*game).length*3){		//Hit sides 
+	    	PEOUT = 0x04;
+			PEOUT &= 0x00;
 			(*game).ballAngle = 512 - (*game).ballAngle;	  
 			(*game).ballAngle =(*game).ballAngle & 511;
 			if(((*game).ballY >> 4) <= 1){                                        //if/else that returns ball to field
@@ -359,42 +406,51 @@ void nextPosition(struct positions *game, int BallTime){
 
 	/*---------------------------------------------Striker Tester------------------------------------------------------*/
 		
-		if (((*game).ballX >> 4) == (*game).height-1 && (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter+8)){  //Stryker tester
-			if(((*game).ballY >> 4) > (*game).strikerCenter-1 && ((*game).ballY >> 4) < (*game).strikerCenter+1){				//Stryker middle field
+		if (((*game).ballX >> 4) == (*game).height-1 && (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter+8)){  //Striker tester
+			PEOUT = 0x10;
+			PEOUT &= 0x00;
+			if(((*game).ballY >> 4) > (*game).strikerCenter-1 && ((*game).ballY >> 4) < (*game).strikerCenter+1){				//Striker middle field
 				(*game).ballAngle = 256 - (*game).ballAngle;
-				(*game).hitTest = 1;		  
+				(*game).hitTest = 1;
+		  
 
-			} else if (((*game).ballY >> 4) > (*game).strikerCenter-4 && ((*game).ballY >> 4) < (*game).strikerCenter-1){		//Stryker inner left field
+
+			} else if (((*game).ballY >> 4) > (*game).strikerCenter-4 && ((*game).ballY >> 4) < (*game).strikerCenter-1){		//Striker inner left field
+
 				(*game).ballAngle = 256 - (*game).ballAngle;		// turn ball
 				(*game).ballAngle =(*game).ballAngle & 511;		// repair angle
-				if(((*game).ballAngle+16)<374){
-					(*game).ballAngle =(*game).ballAngle + 16;		// add to angle if the result will be inside the max angle range
-				}
-				(*game).hitTest = 1;	 							// set hittest to 1
-			  
-			} else if (((*game).ballY >> 4) > (*game).strikerCenter+1 && ((*game).ballY >> 4) < (*game).strikerCenter+4){		//Stryker inner right field
-				(*game).ballAngle = 256 - (*game).ballAngle;
-				(*game).ballAngle =(*game).ballAngle & 511;
-				if(((*game).ballAngle-16)>138){
-					(*game).ballAngle =(*game).ballAngle - 16;	
-				}
-				(*game).hitTest = 1; 
-			  
-			} else if (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter-4){		//Stryker outer left field 
-				(*game).ballAngle = 256 - (*game).ballAngle;
-				(*game).ballAngle =(*game).ballAngle & 511;
+	
 				if(((*game).ballAngle+24)<374){
-					(*game).ballAngle =(*game).ballAngle + 24;	
+					(*game).ballAngle =(*game).ballAngle + 24;			// add to angle if the result will be inside the max angle range
+				}
+				(*game).hitTest = 1;	 							// set hitTest to 1
+			  
+			} else if (((*game).ballY >> 4) > (*game).strikerCenter+1 && ((*game).ballY >> 4) < (*game).strikerCenter+3){		//Striker inner right field
+				(*game).ballAngle = 256 - (*game).ballAngle;
+				(*game).ballAngle =(*game).ballAngle & 511;
+	
+				if(((*game).ballAngle-24)<374){
+					(*game).ballAngle =(*game).ballAngle - 24;			
 				}
 				(*game).hitTest = 1;
 			  
-			} else {																											//Stryker outer right field
+			} else if (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter-3){		//Striker outer left field 
 				(*game).ballAngle = 256 - (*game).ballAngle;
 				(*game).ballAngle =(*game).ballAngle & 511;
-				if(((*game).ballAngle-24)>130){
-					(*game).ballAngle =(*game).ballAngle - 24;	
+				(*game).ballAngle =(*game).ballAngle + 24;
+				if(((*game).ballAngle+24)<374){
+					(*game).ballAngle =(*game).ballAngle + 24;			
 				}
-				(*game).hitTest = 1; 
+				(*game).hitTest = 1;
+			  
+			} else {																											//Striker outer right field
+				(*game).ballAngle = 256 - (*game).ballAngle;
+				(*game).ballAngle =(*game).ballAngle & 511;
+
+				if(((*game).ballAngle-24)<374){
+					(*game).ballAngle =(*game).ballAngle - 24;			
+				}
+				(*game).hitTest = 1;
 			}
 
 	/*---------------------------------------------Death Tester------------------------------------------------------*/
@@ -409,15 +465,21 @@ void nextPosition(struct positions *game, int BallTime){
 				}
 				gotoxy(55, 50);
 				printf("Mexico triumpfed. Press right button to restart");
+				(*game).points = 0;
+				PEOUT = 0x02;
 				while(1){
 					if((readkey() & 0x80)==0){
 						for(i=0; i <= 46; i++){
 							deleteCharacter(55, 50+i);
+							PEOUT &= 0x00;
 						}
 						break;
 					}
 				}
 				gameInitial(game);
+			} else {
+				PEOUT = 0x30;
+				PEOUT &= 0x00;
 			}
 			releaseBall(game);
 		}
@@ -430,7 +492,7 @@ void nextPosition(struct positions *game, int BallTime){
 			(*game).speedY = sinus((*game).ballAngle);
 			(*game).hitTest = 0;
 		}
-		deleteCharacter(oldBallX,oldBallY);         //deletes old ball and draws new one
+		deleteCharacter((*game).oldBallX,(*game).oldBallY);         //deletes old ball and draws new one
 		drawBall(((*game).ballX) >> 4,((*game).ballY) >> 4);
 	}
 
@@ -448,7 +510,7 @@ void nextPosition(struct positions *game, int BallTime){
 
 void releaseBall(struct positions *game){
 	int i;
-
+	
 	(*game).ballX = (*game).height - 1;                             //Resets ball
 	(*game).ballY = ((*game).length*3)/2;
 	(*game).speedX = 0;
@@ -465,7 +527,7 @@ void releaseBall(struct positions *game){
 
 	while(1){                                                       //Restarts game
 		if((readkey() & 0x40)==0){
-			(*game).ballAngle = 280;   					//start angle
+			(*game).ballAngle = 256;   					//start angle
 			(*game).speedX = cosinus((*game).ballAngle);
 			(*game).speedY = sinus((*game).ballAngle);
 		break;
@@ -474,3 +536,4 @@ void releaseBall(struct positions *game){
 }
 
 #endif
+
