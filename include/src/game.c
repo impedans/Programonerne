@@ -56,8 +56,8 @@ void gameInitial(struct positions *game){
 	color(15,0);
   
     // draw Blocks
-	(*game).blockHeight = 1;
-	(*game).blockLength = 2;
+	(*game).blockHeight = 2;
+	(*game).blockLength = 4;
 	if((*game).level == 1){
 		//Level 1//
 		(*game).numBlocks = 8;
@@ -70,14 +70,14 @@ void gameInitial(struct positions *game){
 		for(i = 16; i < 24; i++){
 			(*game).block[i][2] = 3;
 		}*/
-		drawBlock(5, 4 ,0 ,game);
-		drawBlock(5, 7 ,1 ,game);
-		drawBlock(5, 10 ,2 ,game);
-		drawBlock(5, 13 ,3 ,game);
-		drawBlock(5, 16 ,4 ,game);
-		drawBlock(5, 19 ,5 ,game);
-		drawBlock(5, 22 ,6 ,game);
-		drawBlock(5, 25 ,7 ,game);
+		drawBlock(5, 5 ,0 ,game);
+		drawBlock(5, 10 ,1 ,game);
+		drawBlock(5, 15 ,2 ,game);
+		drawBlock(5, 20 ,3 ,game);
+		drawBlock(5, 25 ,4 ,game);
+		drawBlock(5, 30 ,5 ,game);
+		drawBlock(5, 35 ,6 ,game);
+		drawBlock(5, 40 ,7 ,game);
 
 	/*	drawBlock(10, 15 ,8 ,game);
 		drawBlock(10, 31 ,9 ,game);
@@ -324,8 +324,10 @@ void nextPosition(struct positions *game, int BallTime){
 				(*game).ballAngle = 256 - (*game).ballAngle;		// turn ball
 				(*game).ballAngle =(*game).ballAngle & 511;		// repair angle
 	
-				if(((*game).ballAngle+24)<374){
-					(*game).ballAngle =(*game).ballAngle + 24;			// add to angle if the result will be inside the max angle range
+				if(((*game).ballAngle + 10) > 374){
+					(*game).ballAngle = 374;			// add to angle if the result will be inside the max angle range
+				}else{
+					(*game).ballAngle += 10;
 				}
 				(*game).hitTest = 1;	 							// set hitTest to 1
 			  
@@ -333,8 +335,10 @@ void nextPosition(struct positions *game, int BallTime){
 				(*game).ballAngle = 256 - (*game).ballAngle;
 				(*game).ballAngle =(*game).ballAngle & 511;
 	
-				if(((*game).ballAngle-24)<374){
-					(*game).ballAngle =(*game).ballAngle - 24;			
+				if(((*game).ballAngle - 10) < 148){
+					(*game).ballAngle = 148;			
+				}else{
+					(*game).ballAngle -= 10;
 				}
 				(*game).hitTest = 1;
 			  
@@ -342,8 +346,10 @@ void nextPosition(struct positions *game, int BallTime){
 				(*game).ballAngle = 256 - (*game).ballAngle;
 				(*game).ballAngle =(*game).ballAngle & 511;
 				(*game).ballAngle =(*game).ballAngle + 24;
-				if(((*game).ballAngle+24)<374){
-					(*game).ballAngle =(*game).ballAngle + 24;			
+				if(((*game).ballAngle + 24) > 374){
+					(*game).ballAngle = 374;			
+				} else{
+					(*game).ballAngle += 24;
 				}
 				(*game).hitTest = 1;
 			  
@@ -351,9 +357,12 @@ void nextPosition(struct positions *game, int BallTime){
 				(*game).ballAngle = 256 - (*game).ballAngle;
 				(*game).ballAngle =(*game).ballAngle & 511;
 
-				if(((*game).ballAngle-24)<374){
-					(*game).ballAngle =(*game).ballAngle - 24;			
+				if(((*game).ballAngle - 24) < 148){
+					(*game).ballAngle = 148;			
+				}else{
+					(*game).ballAngle -= 24;
 				}
+				
 				(*game).hitTest = 1;
 			}
 
@@ -380,6 +389,7 @@ void nextPosition(struct positions *game, int BallTime){
 						break;
 					}
 				}
+				(*game).level = 1;
 				gameInitial(game);
 			} else {
 				PEOUT = 0x30;
@@ -431,7 +441,7 @@ void releaseBall(struct positions *game){
 
 	while(1){                                                       //Restarts game
 		if((readkey() & 0x40)==0){
-			(*game).ballAngle = 256;   					//start angle
+			(*game).ballAngle = 230;   					//start angle
 			(*game).speedX = cosinus((*game).ballAngle);
 			(*game).speedY = sinus((*game).ballAngle);
 		break;
