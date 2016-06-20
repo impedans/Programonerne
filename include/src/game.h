@@ -29,6 +29,7 @@ struct positions{
 void gameInitial(struct positions *game);
 void nextPosition(struct positions *game, int BallTime);
 void releaseBall(struct positions *game);
+void mate(struct positions *game, short l, short v, short i);
 
 
 #endif

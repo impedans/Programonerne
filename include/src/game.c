@@ -56,28 +56,28 @@ void gameInitial(struct positions *game){
 	color(15,0);
   
     // draw Blocks
-	(*game).blockHeight = 3;
-	(*game).blockLength = 13;
+	(*game).blockHeight = 1;
+	(*game).blockLength = 2;
 	if((*game).level == 1){
 		//Level 1//
 		(*game).numBlocks = 8;
 		for(i = 0; i < 8; i++){
 			(*game).block[i][2] = 3;
 		}
-		/*for(i = 8; i < 16; i++){
-			(*game).block[i][2] = 2;
+	/*	for(i = 8; i < 16; i++){
+			(*game).block[i][2] = 3;
 		}
 		for(i = 16; i < 24; i++){
-			(*game).block[i][2] = 1;
+			(*game).block[i][2] = 3;
 		}*/
-		drawBlock(5, 15 ,0 ,game);
-		drawBlock(5, 31 ,1 ,game);
-		drawBlock(5, 47 ,2 ,game);
-		drawBlock(5, 63 ,3 ,game);
-		drawBlock(5, 79 ,4 ,game);
-		drawBlock(5, 95 ,5 ,game);
-		drawBlock(5, 111 ,6 ,game);
-		drawBlock(5, 127 ,7 ,game);
+		drawBlock(5, 4 ,0 ,game);
+		drawBlock(5, 7 ,1 ,game);
+		drawBlock(5, 10 ,2 ,game);
+		drawBlock(5, 13 ,3 ,game);
+		drawBlock(5, 16 ,4 ,game);
+		drawBlock(5, 19 ,5 ,game);
+		drawBlock(5, 22 ,6 ,game);
+		drawBlock(5, 25 ,7 ,game);
 
 	/*	drawBlock(10, 15 ,8 ,game);
 		drawBlock(10, 31 ,9 ,game);
@@ -98,6 +98,44 @@ void gameInitial(struct positions *game){
 		drawBlock(15, 127 ,23 ,game);*/
 	}
 
+}
+
+void mate(struct positions *game, short l, short v, short i){
+	if(l == v && l > 0){
+				
+					(*game).ballAngle = 256 + (*game).ballAngle;	   
+					(*game).ballAngle =(*game).ballAngle & 511;
+					(*game).hitTest   = 1;
+					(*game).ballX     = (*game).oldBallX << 4;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+
+
+					(*game).block[i][2]--;
+					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+				} else if (l > v){
+				
+					(*game).ballAngle = 512 - (*game).ballAngle;	   
+					(*game).ballAngle =(*game).ballAngle & 511;
+					(*game).hitTest = 1;
+					(*game).ballY     = (*game).oldBallY << 4;
+					PEOUT = 0x08;
+
+					
+					(*game).block[i][2]--;
+					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+				} else if (v > l){
+				
+					(*game).ballAngle = 256 - (*game).ballAngle;	   
+					(*game).ballAngle =(*game).ballAngle & 511;
+					(*game).hitTest = 1;
+					(*game).ballX     = (*game).oldBallX << 4;
+					PEOUT = 0x08;
+
+
+					(*game).block[i][2]--;
+					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
+				}
 }
 
 void nextPosition(struct positions *game, int BallTime){
@@ -130,41 +168,9 @@ void nextPosition(struct positions *game, int BallTime){
 						l++;
 					}
 				}
-				if(l == v && l > 0){
 				
-					(*game).ballAngle = 256 + (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
+				mate(game, l, v, i);
 
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (l > v){
-				
-					(*game).ballAngle = 512 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest = 1;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (v > l){
-				
-					(*game).ballAngle = 256 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				}
 				l = 0, v = 0;
 			}
 		
@@ -182,41 +188,7 @@ void nextPosition(struct positions *game, int BallTime){
 						l++;
 					}
 				}
-				if(l == v && l > 0){
-					
-					(*game).ballAngle = 256 + (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (l > v){
-					
-					(*game).ballAngle = 512 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (v > l){
-					
-					(*game).ballAngle = 256 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				}
+				mate(game, l, v, i);
 				l = 0, v = 0;
 			}
 
@@ -239,41 +211,7 @@ void nextPosition(struct positions *game, int BallTime){
 						// printf("l: %d", l);
 					}
 				}
-				if(l == v && l > 0){
-					
-					(*game).ballAngle = 256 + (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (l > v){
-					
-					(*game).ballAngle = 512 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (v > l){
-					
-					(*game).ballAngle = 256 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				}
+				mate(game, l, v, i);
 				l = 0, v = 0;
 			}
 			
@@ -291,41 +229,7 @@ void nextPosition(struct positions *game, int BallTime){
 						l++;
 					}
 				}
-				if(l == v && l > 0){
-					
-					(*game).ballAngle = 256 + (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (l > v){
-					
-					(*game).ballAngle = 512 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballY     = (*game).oldBallY << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				} else if (v > l){
-					
-					(*game).ballAngle = 256 - (*game).ballAngle;	   
-					(*game).ballAngle =(*game).ballAngle & 511;
-					(*game).hitTest   = 1;
-					(*game).ballX     = (*game).oldBallX << 4;
-					PEOUT = 0x08;
-					PEOUT &= 0x00;
-					
-					(*game).block[i][2]--;
-					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
-				}
+				mate(game, l, v, i);
 				l = 0, v = 0;
 			}
 			
@@ -346,7 +250,7 @@ void nextPosition(struct positions *game, int BallTime){
 					(*game).hitTest   = 1;
 					(*game).ballX     = (*game).oldBallX << 4;
 					PEOUT = 0x08;
-					PEOUT &= 0x00;
+
 					
 					(*game).block[i][2]--;
 					drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -370,7 +274,7 @@ void nextPosition(struct positions *game, int BallTime){
 						(*game).hitTest   = 1;
 						(*game).ballX     = (*game).oldBallX << 4;
 						PEOUT = 0x08;
-						PEOUT &= 0x00;
+
 					
 						(*game).block[i][2]--;
 						drawBlock((*game).block[i][0], (*game).block[i][1], i, game);
@@ -408,7 +312,7 @@ void nextPosition(struct positions *game, int BallTime){
 		
 		if (((*game).ballX >> 4) == (*game).height-1 && (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter+8)){  //Striker tester
 			PEOUT = 0x10;
-			PEOUT &= 0x00;
+			
 			if(((*game).ballY >> 4) > (*game).strikerCenter-1 && ((*game).ballY >> 4) < (*game).strikerCenter+1){				//Striker middle field
 				(*game).ballAngle = 256 - (*game).ballAngle;
 				(*game).hitTest = 1;
@@ -479,7 +383,7 @@ void nextPosition(struct positions *game, int BallTime){
 				gameInitial(game);
 			} else {
 				PEOUT = 0x30;
-				PEOUT &= 0x00;
+
 			}
 			releaseBall(game);
 		}

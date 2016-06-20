@@ -56,8 +56,8 @@ void LEDinit(){
 void main(){
 	struct positions game1;
 	int ballTimer;
-	game1.length = 50;
-	game1.height = 50;
+	game1.length = 25;
+	game1.height = 25;
 	game1.level  = 1;
 	game1.points = 0;
 
@@ -70,12 +70,13 @@ void main(){
 	releaseBall(&game1);
 	
 	while(1){
-		if(nTickTime>=1){
+		if(nTickTime>=10){
 			nextPosition(&game1, 0);
 			nTickTime = 0;
 		}
-		if(nBallTime>=25){
+		if(nBallTime>=50){
 			nextPosition(&game1, 1);
+			PEOUT &= 0x00;
 			nBallTime = 0;
 		}
 	}
