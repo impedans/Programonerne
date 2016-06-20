@@ -6,10 +6,15 @@
 //	(comments, kudos, flames to daytshen@hotmail.com)
 //
 // =====================================================================
-#include <sio.h>
+#include <eZ8.h>             // special encore constants, macros and flash routines
+#include <sio.h>             // special encore serial i/o routines
 #include "lut.h"
 #include "ansi.h"
+#include "gpio.h"
 #include "game.h"
+
+#ifndef LUT_C_
+#define LUT_C_
 
 // -----------------------------------------------------------------------
 // SIN: a 512 long LUT of 16bit values in 2.14 format
@@ -89,37 +94,12 @@ const signed short SIN[512]=
 	0xF9BA,0xFA82,0xFB4B,0xFC13,0xFCDC,0xFDA5,0xFE6E,0xFF37,
 };
 
-void printFix(long i){
-	if ((i & 0x80000000) != 0){
-		printf("-");
-		i = ~i+1;
-	}
-	printf("%1d.%04ld\n", i >> 16, 10000 * (unsigned long) (i & 0xffff) >> 16);
+signed short sinus(int i){
+	return SIN[i & 511];
 }
 
-long expand(long i){
-	return i << 2;
+signed short cosinus(int i){
+	return SIN[(i+128) & 511];
 }
 
-signed short sin(int i){
-	int n = i & 511;
-	return (SIN[n]);
-}
-
-signed short cos(int i){
-	return sin(i+128);
-}
-
-void initVector(struct positions *game, int angle){
-	long tempX = (*game).vectorX << FIX14_SHIFT;
-	long tempY = (*game).vectorY << FIX14_SHIFT;
-	long tempCos = cos(angle);
-	long tempSin = sin(angle);
-	
-	//(*game).speedX = ((*game).speedX << 14);
-	//(*game).speedY = ((*game).speedY << 14);
-	(*game).vectorX = (FIX14_MULT(tempX,tempCos)) - (FIX14_MULT(tempY,tempSin));			
-	(*game).vectorY = (FIX14_MULT(tempX,tempSin)) + (FIX14_MULT(tempY,tempCos));
-	(*game).speedX = (FIX14_MULT(tempX,tempCos)) - (FIX14_MULT(tempY,tempSin)) >> 10;			// her er lavet om !!!!!
-	(*game).speedY = (FIX14_MULT(tempX,tempSin)) + (FIX14_MULT(tempY,tempCos)) >> 10;     // her er lavet om !!!!!
-}
+#endif

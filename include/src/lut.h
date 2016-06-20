@@ -5,25 +5,18 @@
 //
 // =====================================================================
 
-#ifndef _LUT_H_
-#define _LUT_H_
+#ifndef LUT_H_
+#define LUT_H_
 
 // === LUT SIZES ===
 #define SIN_SIZE 512
 
 // === LUT DECLARATIONS ===
-extern const signed short SIN[512];
+extern const signed short SIN[512];		   //signed short
 
-struct TVector {
-	long x;
-	long y;
-};
+signed short sinus(int a);
+signed short cosinus(int a);
 
-void printFix(long i);
-long expand(long i);
-signed short sin(int a);
-signed short cos(int a);
-void initVector(struct positions *game, int angle);
 
 #endif	// LUT_H
 

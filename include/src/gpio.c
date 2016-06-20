@@ -1,97 +1,62 @@
-#include <sio.h>
 #include <eZ8.h>             // special encore constants, macros and flash routines
+#include <sio.h>             // special encore serial i/o routines
+#include "lut.h"
+#include "ansi.h"
+#include "gpio.h"
+#include "game.h"
+#ifndef GPIO_C
+#define GPIO_C
 
 char readkey(){
 	unsigned char states=0;
 
-	PDDD   = 0x08;	//high nibble = input, low nibble = output
+	PDDD   = 0x08;	        //high nibble = input, low nibble = output
 	PFDD   = 0xC0;
-	PGADDR = 0;		//no function; provides some protection
- 	states |= PDIN & 0x08;//read the upper four I/O pins
+	PGADDR = 0;		        //no function; provides some protection
+ 	states |= PDIN & 0x08;  //read the upper four I/O pins
 	states |= PFIN & 0xC0;
 	return states;
 }
 
-void ledClock(int n){
-	if(n==0){
-		PEOUT &= ~(1<<6);
-		PEOUT &= ~(1<<5);
-		PGOUT &= ~(1<<7);
-
-		PEOUT &= ~(1<<7);
-		PEOUT |= (1<<7);
-		PEOUT &= ~(1<<7);
-	}else if(n==1){
-		PEOUT &= ~(1<<6);
-		PEOUT &= ~(1<<5);
-		PEOUT &= ~(1<<7);
-
-		PGOUT &= ~(1<<7);
-		PGOUT |= (1<<7);
-		PGOUT &= ~(1<<7);
-	}else if(n==2){
-		PEOUT &= ~(1<<6);
-		PGOUT &= ~(1<<7);
-		PEOUT &= ~(1<<7);
-
-		PEOUT &= ~(1<<5);
-		PEOUT |= (1<<5);
-		PEOUT &= ~(1<<5);
-	}else{
-		PGOUT &= ~(1<<7);
-		PEOUT &= ~(1<<5);
-		PEOUT &= ~(1<<7);
-
-		PEOUT &= ~(1<<6);
-		PEOUT |= (1<<6);
-		PEOUT &= ~(1<<6);
+/*
+void LEDsetString(char string[]){
+	int i,j;
+	for(i = 0; i < 5; i++){
+		for(j = 0; j < 5 ; j++){
+			videoBuffer[i][j] = character_data[string[4-i]-0x20][4-j];
+		}
+		videoBuffer[i][5]=0x00;
 	}
 }
 
-void led(int *a, int *b, int *c){
-	int total = (*a) + (*b) + (*c);
-	PEDD  = 0x00;
-	PGDD  = 0x00;
-	printf("Led-funktion siger: %d\n", total);
+void LEDupdate(int i){
+	int j;
+	if(nFlagClock==1){
+		for(j=0; j < 4; j++){    //update
 
-	PEOUT &= ~0x01;
+			PEOUT |= 0x1F;
+			PEOUT &= ~(1<<i);
+			PGOUT = videoBuffer[j][i] & 0x7F;
 
-	PGOUT = total & 0x7F;
+			switch(j){
+				case 3:
+					DIGIT_1
+					break;
+				case 2:
+					DIGIT_2
+					break;
+				case 1:
+					DIGIT_3
+					break;
+				default:
+					DIGIT_4
+					break;
 
-	ledClock(2);
-}
-
-void counter(int *a, int *b, int *c){
-	if((readkey() & 0x08)==0){
-		while(1){
-			if((readkey() & 0x08)!=0){
-				(*a)++;
-				printf("a: %d\n", *a);
-				led(a, b, c);
-				break;
-			}
-		}
-	}
-
-	if((readkey() & 0x40)==0){
-		while(1){
-			if((readkey() & 0x40)!=0){
-				(*b)++;
-				printf("b: %d\n", *b);
-				led(a, b, c);
-				break;
-			}
-		}
-	}
-
-	if((readkey() & 0x80)==0){
-		while(1){
-			if((readkey() & 0x80)!=0){
-				(*c)++;
-				printf("c: %d\n", *c);
-				led(a, b, c);
-				break;
 			}
 		}
 	}
 }
+
+*/
+
+#endif

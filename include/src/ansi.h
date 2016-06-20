@@ -1,12 +1,6 @@
-#include <eZ8.h>             // special encore constants, macros and flash routines
-#include <sio.h>             // special encore serial i/o routines
-#include <string.h>
-#include "game.h"
 
-#define FIX14_SHIFT 14
-
-#define FIX14_MULT(a,b)  ( (a)*(b) >> FIX14_SHIFT )
-#define FIX14_DIV(a,b)  ( (a) << FIX14_SHIFT / (b))
+#ifndef _ANSI_H_
+#define _ANSI_H_
 
 void fgcolor(int foreground);
 void bgcolor(int background);
@@ -26,3 +20,5 @@ void deleteCharacter(int x,int y);
 void drawBlock(int x1, int y1, short N, struct positions *game);
 void drawInfo(struct positions *game);
 void drawFlag(int lives);
+
+#endif
