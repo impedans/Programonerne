@@ -174,7 +174,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 			
 			if(j == (*game).numBlocks){
 				(*game).level++;
-				PEOUT = 0x40;
+				PEOUT = 0x02;
 				drawInfo(game);
 				for(i = -7; i <= 7; i++){
 					deleteCharacter((*game).height, (*game).strikerCenter-i);

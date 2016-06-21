@@ -22,7 +22,7 @@ struct positions{
 	short numBlocks;
 	short blockLength;
 	short blockHeight;
-	short block[20][3];
+	char block[100][3];
 };
 
 
