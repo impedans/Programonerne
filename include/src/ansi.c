@@ -179,7 +179,10 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				for(i = -7; i <= 7; i++){
 					deleteCharacter((*game).height, (*game).strikerCenter-i);
 				}
-				gotoxy(55, 50);
+				gotoxy(20, 79);
+				printf("You win!");
+				gotoxy(21, 79);
+				printf("Press right button to continue");
 				while(1){
 					if((readkey() & 0x80)==0){
 						for(i=0; i <= 46; i++){
@@ -225,38 +228,38 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 }
 
 void drawInfo(struct positions *game){
-	gotoxy(55,18);
+	gotoxy(2,87);
 	printf("%d", (*game).lives);
-	gotoxy(56,18);
+	gotoxy(3,87);
 	printf("%d", (*game).points);
-	gotoxy(57,18);
+	gotoxy(4,87);
 	printf("%d", (*game).level);
 }
 
 void drawFlag(int lives){
 	int i, j;
 	if (lives == 2){
-		gotoxy(55,99);
+		gotoxy(10,79);
 		for (i = 0; i < 7; i++){
 			color(2,0);
 			printf("%c%c%c%c%c%c%c", 219, 219, 219, 219, 219, 219, 219);
-			gotoxy(55+i,99);
+			gotoxy(10+i,79);
 			color(15,0);
 		}
 	} else if (lives == 1){
-		gotoxy(55,106);
+		gotoxy(10,86);
 		for (i = 0; i < 7; i++){
 			color(15,0);
 			printf("%c%c%c%c%c%c%c", 219, 219, 219, 219, 219, 219, 219);
-			gotoxy(55+i,106);
+			gotoxy(10+i,86);
 			color(15,0);
 		}
 	} else if (lives == 0) {
-		gotoxy(55,113);
+		gotoxy(10,93);
 		for (i = 0; i < 7; i++){
 			color(1,0);
 			printf("%c%c%c%c%c%c%c", 219, 219, 219, 219, 219, 219, 219);
-			gotoxy(55+i,113);
+			gotoxy(10+i,93);
 			color(15,0);
 		}
 	}

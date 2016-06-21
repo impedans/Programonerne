@@ -34,14 +34,14 @@ void gameInitial(struct positions *game){
 	drawBall((*game).ballX,(*game).ballY);
 
 	//set amount of lives, write info text
-	gotoxy(55,10);
+	gotoxy(2,79);
 	printf("Lives: ");
 	(*game).lives = 3;
 	//(*game).points = 0;
-	gotoxy(56,10);
+	gotoxy(3,79);
 	printf("Points: ");
 	//(*game).level = 1;
-	gotoxy(57,10);
+	gotoxy(4,79);
 	printf("Level: ");
 	drawInfo(game);
 
@@ -521,8 +521,10 @@ void nextPosition(struct positions *game, int BallTime){
 				for(i = -7; i <= 7; i++){
 					deleteCharacter((*game).height, (*game).strikerCenter-i);
 				}
-				gotoxy(55, 50);
-				printf("Mexico triumpfed. Press right button to restart");
+				gotoxy(20, 79);
+				printf("Mexico triumpfed");
+				gotoxy(21, 79);
+				printf("Press right button to restart");
 				(*game).points = 0;
 				PEOUT = 0x04;
 				while(1){

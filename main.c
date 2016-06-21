@@ -68,6 +68,7 @@ void main(){
 	game1.lives = 3;
 	gameInitial(&game1);
 	releaseBall(&game1);
+
 	
 	while(1){
 		if(nTickTime>=10){
