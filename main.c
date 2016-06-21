@@ -60,12 +60,12 @@ void main(){
 	game1.height = 25;
 	game1.level  = 1;
 	game1.points = 0;
+	game1.lives = 2; //Bliver 3 i gameInitial
 
 
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
 
 	LEDinit();    //flydt timeren i sin egen funktion!!
-	game1.lives = 3;
 	gameInitial(&game1);
 	releaseBall(&game1);
 

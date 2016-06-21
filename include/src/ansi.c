@@ -173,26 +173,55 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 			}
 			
 			if(j == (*game).numBlocks){
-				(*game).level++;
-				PEOUT = 0x02;
-				drawInfo(game);
-				for(i = -7; i <= 7; i++){
-					deleteCharacter((*game).height, (*game).strikerCenter-i);
-				}
-				gotoxy(20, 79);
-				printf("You win!");
-				gotoxy(21, 79);
-				printf("Press right button to continue");
-				while(1){
-					if((readkey() & 0x80)==0){
-						for(i=0; i <= 46; i++){
-							deleteCharacter(55, 50+i);
-						}
-						break;
+				if ((*game).level == 3){
+					gotoxy(20, 79);
+					printf("You win the game!");
+					gotoxy(21, 79);
+					printf("The filthy Mexicans were kept out.");
+					gotoxy(22, 79);
+					printf("Press right button to kick their ass again");
+					PEOUT = 0x02;
+					drawInfo(game);
+					for(i = -7; i <= 7; i++){
+						deleteCharacter((*game).height, (*game).strikerCenter-i);
 					}
+					while(1){
+						if((readkey() & 0x80)==0){
+							for(i=0; i <= 46; i++){
+								deleteCharacter(20, 79+i);
+							}
+							break;
+						}
+					}
+					(*game).level = 1;
+					(*game).lives = 2;
+					(*game).points = 0;
+					gameInitial(game);
+					releaseBall(game);
+
+				} else {
+
+					(*game).level++;
+					PEOUT = 0x02;
+					drawInfo(game);
+					for(i = -7; i <= 7; i++){
+						deleteCharacter((*game).height, (*game).strikerCenter-i);
+					}
+					gotoxy(20, 79);
+					printf("Level complete!");
+					gotoxy(21, 79);
+					printf("Press right button to continue");
+					while(1){
+						if((readkey() & 0x80)==0){
+							for(i=0; i <= 46; i++){
+								deleteCharacter(20, 79+i);
+							}
+							break;
+						}
+					}
+					gameInitial(game);
+					releaseBall(game);	
 				}
-				gameInitial(game);
-				releaseBall(game);	
 			}
 		}
 		//(*game).numBlocks--;

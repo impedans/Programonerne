@@ -35,8 +35,8 @@ void gameInitial(struct positions *game){
 
 	//set amount of lives, write info text
 	gotoxy(2,79);
-	printf("Lives: ");
-	(*game).lives = 3;
+	printf("Lives: ");	
+	(*game).lives++;
 	//(*game).points = 0;
 	gotoxy(3,79);
 	printf("Points: ");
@@ -172,7 +172,7 @@ void gameInitial(struct positions *game){
 
 
 	} else if((*game).level == 3){
-		//Level 2//
+		//Level 3//
 		(*game).numBlocks = 57;
 
 		for(i = 0; i < (*game).numBlocks; i++){
@@ -526,6 +526,7 @@ void nextPosition(struct positions *game, int BallTime){
 				gotoxy(21, 79);
 				printf("Press right button to restart");
 				(*game).points = 0;
+				(*game).lives = 2;
 				PEOUT = 0x04;
 				while(1){
 					if((readkey() & 0x80)==0){
