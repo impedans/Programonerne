@@ -28,8 +28,8 @@ void LEDinit(){
 	DI(); // dissable timer
 
 	T0CTL = 0X39; // 00111001
-	T0RH = 0x00;	//upper half of reload value ex. A0
-	T0RL = 0x90;	//first half of reload value ex. 02		(hele tal 0xA002)
+	T0RH = 0x00;	//upper half of reload value ex. 00
+	T0RL = 0x90;	//first half of reload value ex. 90		(hele tal 0x0090)
 	T0H = 0x00;		// set to 0
 	T0L = 0x00;		// set to 0
 
@@ -42,6 +42,10 @@ void LEDinit(){
 
 	EI(); // enable timer
 
+	PCDD = 0x00;
+	PCOUT &= 0x00;
+
+
 	//PFDD   = 0xC0;
 }
 
@@ -51,7 +55,7 @@ void main(){
 	int ballTimer;
 	game1.length = 25;
 	game1.height = 25;
-	game1.level  = 1;
+	game1.level  = 3;
 	game1.points = 0;
 	game1.pointBonus = 0;
 
@@ -72,7 +76,8 @@ void main(){
 		}
 		if(nBallTime>=game1.difficultyBall){ //Ball
 			nextPosition(&game1, 1);
-			PEOUT &= 0x00;
+			//PEOUT &= 0x00;
+			PCOUT &= 0x00;
 			nBallTime = 0;
 		}
 	}

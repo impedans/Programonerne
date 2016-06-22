@@ -152,7 +152,8 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 	(*game).block[N][1] = y1;
 
 	if((*game).block[N][2] == 0){			//Lives = 0
-		PEOUT = 0x20;
+		//PEOUT = 0x20;
+		PCOUT = 0x20;
 		(*game).pointBonus += 10;
 
 		for(i = 0 ; i < (*game).blockHeight ; i++){
@@ -178,7 +179,8 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 					printf("The filthy Mexicans were kept out.");
 					gotoxy(22, 79);
 					printf("Press right button to kick their ass again");
-					PEOUT = 0x02;
+					//PEOUT = 0x02;
+					PCOUT = 0x01;
 					drawInfo(game);
 					for(i = -7; i <= 7; i++){
 						deleteCharacter((*game).height, (*game).strikerCenter-i);
@@ -200,7 +202,8 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				} else {
 					
 					(*game).level++;
-					PEOUT = 0x02;
+					//PEOUT = 0x02;
+					PCOUT = 0x01;
 					drawInfo(game);
 					for(i = -7; i <= 7; i++){
 						deleteCharacter((*game).height, (*game).strikerCenter-i);
