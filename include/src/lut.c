@@ -13,8 +13,6 @@
 #include "gpio.h"
 #include "game.h"
 
-#ifndef LUT_C_
-#define LUT_C_
 
 // -----------------------------------------------------------------------
 // SIN: a 512 long LUT of 16bit values in 2.14 format
@@ -101,5 +99,3 @@ signed short sinus(int i){
 signed short cosinus(int i){
 	return SIN[(i+128) & 511];
 }
-
-#endif

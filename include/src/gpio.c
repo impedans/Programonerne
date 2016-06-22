@@ -4,8 +4,7 @@
 #include "ansi.h"
 #include "gpio.h"
 #include "game.h"
-#ifndef GPIO_C
-#define GPIO_C
+
 
 char readkey(){
 	unsigned char states=0;
@@ -18,45 +17,4 @@ char readkey(){
 	return states;
 }
 
-/*
-void LEDsetString(char string[]){
-	int i,j;
-	for(i = 0; i < 5; i++){
-		for(j = 0; j < 5 ; j++){
-			videoBuffer[i][j] = character_data[string[4-i]-0x20][4-j];
-		}
-		videoBuffer[i][5]=0x00;
-	}
-}
 
-void LEDupdate(int i){
-	int j;
-	if(nFlagClock==1){
-		for(j=0; j < 4; j++){    //update
-
-			PEOUT |= 0x1F;
-			PEOUT &= ~(1<<i);
-			PGOUT = videoBuffer[j][i] & 0x7F;
-
-			switch(j){
-				case 3:
-					DIGIT_1
-					break;
-				case 2:
-					DIGIT_2
-					break;
-				case 1:
-					DIGIT_3
-					break;
-				default:
-					DIGIT_4
-					break;
-
-			}
-		}
-	}
-}
-
-*/
-
-#endif

@@ -5,8 +5,7 @@
 #include "gpio.h"
 #include "game.h"
 
-#ifndef _ANSI_C_
-#define _ANSI_C_
+
 
 #define ESC 0x1B
 
@@ -154,7 +153,6 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 	if((*game).block[N][2] == 0){			//Lives = 0
 		//PEOUT = 0x20;
 		PCOUT = 0x20;
-		(*game).pointBonus += 10;
 
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			gotoxy(x1+i, y1);
@@ -165,6 +163,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 		(*game).block[N][0] = -10;
 		(*game).block[N][1] = -10;
 		(*game).points     += 200 + (*game).pointBonus;
+		(*game).pointBonus += 100;
 		j = 0;
 		for(i = 0; i < (*game).numBlocks; i++){
 			if((*game).block[i][0] == -10){
@@ -293,4 +292,4 @@ void drawFlag(int lives){
 	}
 }
 
-#endif /*! _ANSI_H_ */
+

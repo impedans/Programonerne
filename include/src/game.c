@@ -5,8 +5,6 @@
 #include "gpio.h"
 #include "game.h"
 
-#ifndef GAME_C
-#define GAME_C
 
 void gameInitial(struct positions *game){
 	short i = 0, j = 0;
@@ -236,7 +234,7 @@ void gameInitial(struct positions *game){
 	printf("Lives: ");
 	//(*game).points = 0;
 	gotoxy(3,79);
-	printf("Points: ");
+	printf("Tacos: ");
 	//(*game).level = 1;
 	gotoxy(4,79);
 	printf("Level: ");
@@ -622,9 +620,13 @@ void difficultyMenu(struct positions *game){
 	color(12,0);
 	gotoxy(7,17);
 	printf("[BEAN BOILERS]");
+	gotoxy(8,18);
+	printf("+1000 tacos");
 	gotoxy(7,37);
 	color(1,0);
 	printf("[DRUG CARTEL]");
+	gotoxy(8,38);
+	printf("+5000 tacos");
 	gotoxy(11,5);
 	color(15,0);
 	printf("\t\tUse the buttons to pick");
@@ -640,18 +642,17 @@ void difficultyMenu(struct positions *game){
 			PCOUT = 0x20;
 			(*game).difficultyBall = 25;
 			(*game).difficultyStriker = 7;
-
+			(*game).points += 1000;			
 			break;
 		} else if((readkey() & 0x80)==0){ //Hard
 			//PEOUT = 0x08;
 			PCOUT = 0x08;
 			(*game).difficultyBall = 20;
 			(*game).difficultyStriker = 6;
+			(*game).points += 5000;
 			break;
 		}
 	}
 	cleanscreen();
 }
-
-#endif
 
