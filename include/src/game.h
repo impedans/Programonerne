@@ -22,7 +22,10 @@ struct positions{
 	short numBlocks;
 	short blockLength;
 	short blockHeight;
+	short pointBonus;
 	char block[100][3];
+	int difficultyBall;
+	int difficultyStriker;
 };
 
 
@@ -30,6 +33,7 @@ void gameInitial(struct positions *game);
 void nextPosition(struct positions *game, int BallTime);
 void releaseBall(struct positions *game);
 void mate(struct positions *game, short l, short v, short i);
+void difficultyMenu(struct positions *game);
 
 
 #endif

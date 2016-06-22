@@ -11,8 +11,6 @@
 #define DIGIT_3 {PEOUT &= ~(1<<6);PGOUT &= ~(1<<7);PEOUT &= ~(1<<7);PEOUT &= ~(1<<5);PEOUT |= (1<<5);PEOUT &= ~(1<<5);}
 #define DIGIT_4 {PGOUT &= ~(1<<7);PEOUT &= ~(1<<5);PEOUT &= ~(1<<7);PEOUT &= ~(1<<6);PEOUT |= (1<<6);PEOUT &= ~(1<<6);}
 
-char videoBuffer[5][6];
-int nFlagClock=0;
 int nTickTime=0;
 int nBallTime=0;
 
@@ -20,11 +18,6 @@ int nBallTime=0;
 void timer0int(){
 	nTickTime++;
 	nBallTime++;
-	if(nFlagClock==1){
-		nFlagClock=0;
-	}else{
-		nFlagClock=1;
-	}
 }
 
 void LEDinit(){
@@ -60,22 +53,24 @@ void main(){
 	game1.height = 25;
 	game1.level  = 1;
 	game1.points = 0;
-	game1.lives = 2; //Bliver 3 i gameInitial
-
+	game1.pointBonus = 0;
 
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
 
-	LEDinit();    //flydt timeren i sin egen funktion!!
+	LEDinit();    //flyt timeren i sin egen funktion!!
+
+
+
 	gameInitial(&game1);
 	releaseBall(&game1);
 
 	
 	while(1){
-		if(nTickTime>=10){
+		if(nTickTime>=game1.difficultyStriker){ //Striker
 			nextPosition(&game1, 0);
 			nTickTime = 0;
 		}
-		if(nBallTime>=50){
+		if(nBallTime>=game1.difficultyBall){ //Ball
 			nextPosition(&game1, 1);
 			PEOUT &= 0x00;
 			nBallTime = 0;

@@ -14,6 +14,7 @@ void gameInitial(struct positions *game){
 	int height = (*game).height;
 
 	cleanscreen();
+	difficultyMenu(game);
 
 	if ((length > XMAX * 3 || length < 0) || ( height > YMAX || height < 0)){
 		printf("ERROR\n");
@@ -32,18 +33,6 @@ void gameInitial(struct positions *game){
 	(*game).ballX = height - 1;
 	(*game).ballY = (*game).strikerCenter;
 	drawBall((*game).ballX,(*game).ballY);
-
-	//set amount of lives, write info text
-	gotoxy(2,79);
-	printf("Lives: ");	
-	(*game).lives++;
-	//(*game).points = 0;
-	gotoxy(3,79);
-	printf("Points: ");
-	//(*game).level = 1;
-	gotoxy(4,79);
-	printf("Level: ");
-	drawInfo(game);
 
 	// Remove Mexican flag
 	for (i = 0; i < 7; i++){
@@ -241,7 +230,17 @@ void gameInitial(struct positions *game){
 		drawBlock(15, 62 ,55 ,game);
 		drawBlock(15, 66 ,56 ,game);
 	}
-
+	//set amount of lives, write info text
+	gotoxy(2,79);
+	(*game).lives = 3;
+	printf("Lives: ");
+	//(*game).points = 0;
+	gotoxy(3,79);
+	printf("Points: ");
+	//(*game).level = 1;
+	gotoxy(4,79);
+	printf("Level: ");
+	drawInfo(game);
 
 }
 
@@ -457,6 +456,8 @@ void nextPosition(struct positions *game, int BallTime){
 		
 		if (((*game).ballX >> 4) == (*game).height-1 && (((*game).ballY >> 4) > (*game).strikerCenter-8 && ((*game).ballY >> 4) < (*game).strikerCenter+8)){  //Striker tester
 			PEOUT = 0x30;
+			(*game).pointBonus = 0;
+			drawInfo(game);
 			
 			if(((*game).ballY >> 4) > (*game).strikerCenter-1 && ((*game).ballY >> 4) < (*game).strikerCenter+1){				//Striker middle field
 				(*game).ballAngle = 256 - (*game).ballAngle;
@@ -596,6 +597,45 @@ void releaseBall(struct positions *game){
 		break;
 		}
 	}
+}
+
+void difficultyMenu(struct positions *game){
+	cleanscreen();
+	gameWindow(1,1,54,18);
+	gotoxy(3,5);
+	printf("\t\tChoose enemy to keep out:");
+	gotoxy(7,5);
+	color(10,0);
+	printf("[MAIDS]");
+	color(12,0);
+	gotoxy(7,17);
+	printf("[BEAN BOILERS]");
+	gotoxy(7,37);
+	color(1,0);
+	printf("[DRUG CARTEL]");
+	gotoxy(11,5);
+	color(15,0);
+	printf("\t\tUse the buttons to pick");
+	while(1){
+		if((readkey() & 0x08)==0){ //Easy
+			PEOUT = 0x10;
+			(*game).difficultyBall = 35;
+			(*game).difficultyStriker = 10;
+			break;
+		} else if((readkey() & 0x40)==0){ //Medium
+			PEOUT = 0x20;
+			(*game).difficultyBall = 25;
+			(*game).difficultyStriker = 7;
+
+			break;
+		} else if((readkey() & 0x80)==0){ //Hard
+			PEOUT = 0x08;
+			(*game).difficultyBall = 20;
+			(*game).difficultyStriker = 6;
+			break;
+		}
+	}
+	cleanscreen();
 }
 
 #endif

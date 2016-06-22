@@ -151,11 +151,9 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 	(*game).block[N][0] = x1;				//Saves block start coordinates
 	(*game).block[N][1] = y1;
 
-	//gotoxy(0,70);
-	//printf("I really was here maaan   %d", N);
-
 	if((*game).block[N][2] == 0){			//Lives = 0
 		PEOUT = 0x20;
+		(*game).pointBonus += 10;
 
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			gotoxy(x1+i, y1);
@@ -165,7 +163,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 		}
 		(*game).block[N][0] = -10;
 		(*game).block[N][1] = -10;
-		(*game).points     += 100;
+		(*game).points     += 200 + (*game).pointBonus;
 		j = 0;
 		for(i = 0; i < (*game).numBlocks; i++){
 			if((*game).block[i][0] == -10){
@@ -200,7 +198,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 					releaseBall(game);
 
 				} else {
-
+					
 					(*game).level++;
 					PEOUT = 0x02;
 					drawInfo(game);
@@ -233,7 +231,6 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				printf("%c",177);
 			}
 		}
-		(*game).points += 75;
 	} else if((*game).block[N][2] == 2){	//Lives = 2
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			color(15,0);
@@ -242,7 +239,6 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				printf("%c",178);
 			}
 		}
-		(*game).points += 50;
 	} else if((*game).block[N][2] == 3){	//Lives = 3
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			color(1,0);
@@ -260,7 +256,7 @@ void drawInfo(struct positions *game){
 	gotoxy(2,87);
 	printf("%d", (*game).lives);
 	gotoxy(3,87);
-	printf("%d", (*game).points);
+	printf("%d         Bonus: %d         ", (*game).points, (*game).pointBonus);
 	gotoxy(4,87);
 	printf("%d", (*game).level);
 }
