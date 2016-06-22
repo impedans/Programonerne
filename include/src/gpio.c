@@ -6,7 +6,7 @@
 #include "game.h"
 
 
-char readkey(){
+char readkey(){	     		//Reads key and return the key beeing pressed as binary number
 	unsigned char states=0;
 
 	PDDD   = 0x08;	        //high nibble = input, low nibble = output

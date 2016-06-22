@@ -10,7 +10,7 @@
 #define DIGIT_3 {PEOUT &= ~(1<<6);PGOUT &= ~(1<<7);PEOUT &= ~(1<<7);PEOUT &= ~(1<<5);PEOUT |= (1<<5);PEOUT &= ~(1<<5);}
 #define DIGIT_4 {PGOUT &= ~(1<<7);PEOUT &= ~(1<<5);PEOUT &= ~(1<<7);PEOUT &= ~(1<<6);PEOUT |= (1<<6);PEOUT &= ~(1<<6);}
 
-char videoBuffer[21][6] = { 
+char videoBuffer[21][6] = { 					//Text for LED
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00},	//SPACE 
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00},	//SPACE 
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00},	//SPACE 
@@ -38,10 +38,10 @@ char videoBuffer[21][6] = {
 int nFlagClock = 0;
 int nTickTime=0;
 int nTickLEDTime=0;
-int nBallTime=0;
+short nBallTime=0;
 
 #pragma interrupt
-void timer0int(){
+void timer0int(){			//Timer
 	nTickLEDTime++;
 	nTickTime++;
 	nBallTime++;
@@ -52,8 +52,8 @@ void timer0int(){
 	}
 }
 
-void LEDinit(){
-	PEDD  = 0x00;
+void hardwareInit(){				
+	PEDD  = 0x00;			//Sets data directions
 	PGDD  = 0x00;
 	PEOUT &= 0x00;
 
@@ -74,17 +74,14 @@ void LEDinit(){
 
 	EI(); // enable timer
 
-	PCDD = 0x00;
+	PCDD = 0x00;			//Sets output pins for music
 	PCOUT &= 0x00;
-
-
-	//PFDD   = 0xC0;
 }
 
-void LEDupdate(int i){
+void ledUpdate(int i){
 	int j;
 	if(nFlagClock==1){
-		for(j=0; j < 4; j++){    //update
+		for(j=0; j < 4; j++){    //Matrix control
 
 			PEOUT |= 0x1F;
 			PEOUT &= ~(1<<i);
@@ -122,7 +119,7 @@ void main(){
 
 	init_uart(_UART0, _DEFFREQ, _DEFBAUD);
 
-	LEDinit();    //flyt timeren i sin egen funktion!!
+	hardwareInit();    
 
 	gameInitial(&game1);
 	releaseBall(&game1);
@@ -132,18 +129,17 @@ void main(){
 			nextPosition(&game1, 0);
 			nTickTime = 0;
 		}
-		if(nBallTime>=game1.difficultyBall){ //Ball
+		if(nBallTime>=game1.difficultyBall){    //Ball
 			nextPosition(&game1, 1);
-			//PEOUT &= 0x00;
 			PCOUT &= 0x00;
 			nBallTime = 0;
 		}
-		LEDupdate(0);
-		LEDupdate(1);
-		LEDupdate(2);
-		LEDupdate(3);
-		LEDupdate(4);
-		if(nTickLEDTime>=250){
+		ledUpdate(0);
+		ledUpdate(1);
+		ledUpdate(2);
+		ledUpdate(3);
+		ledUpdate(4);
+		if(nTickLEDTime>=250){					//Scrolls text
 			scrollA = videoBuffer[20][5];
 			for(i = 20; i >= 0; i--){
 				for(j = 5; j >= 1; j--){

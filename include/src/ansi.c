@@ -70,45 +70,25 @@ void cleanscreen (){
 	printf("%c[2J", ESC);
 }
 
-void clreol () {
-	printf("%c[K", ESC);
-}
-
 void gotoxy(int x, int y){
 	printf("%c[%d;%dH", ESC, x, y);
-}
-
-void underline(char on){
-	if(on=='y'){
-		printf("%c[4", ESC);
-	} else {
-		printf("%c[24", ESC);
-	}
-}
-
-void blink(char on) {
-	if(on=='y'){
-		printf("%c[5", ESC);
-	} else {
-		printf("%c[25", ESC);
-	}
 }
 
 void reverse(int bg, int fg) {
 	color(bg, fg);
 }
 
-void gameWindow(int x1, int y1, int x2, int y2){ 
+void gameWindow(int x1, int y1, int x2, int y2){ 	   //Draws game windows
 	int i, j;
 	gotoxy(x1,y1);
     printf("%c", 201);	
 
-	for(i = 0 ; i < x2-x1 ; i++){
+	for(i = 0 ; i < x2-x1 ; i++){   					//Horizontal line
 		printf("%c",205);
     }
 		printf("%c\n", 187);
 
-    for (i = 1; i <= (y2-y1); i++){
+    for (i = 1; i <= (y2-y1); i++){					    //Vertival lines
 		gotoxy(x1+i,y1);
 		printf("%c", 186);
 
@@ -117,41 +97,31 @@ void gameWindow(int x1, int y1, int x2, int y2){
     }
 }
 
-void drawStriker(int strikerCenter, int height){
+void drawStriker(int strikerCenter, int height){		 //Draws striker
 	gotoxy(height, strikerCenter - 7);
-	//printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",60,61,61,61,61,61,61,61,61,61,61,61,61,61,62);
 	color(1,15);
 	printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",178,178,178,178,178,178,178,178,178,178,178,178,178,178,178);
 	resetbgcolor();
 
 }
 
-void drawBall(int x,int y){
-	//int i;
+void drawBall(int x,int y){  							//Draws ball
 	gotoxy(x,y);
-	if(x%2==0){
-		printf("%c",88); //124
-		//i=0;
-	} else{
-		printf("%c",88);  //88
-		//i=1;
-	}
-	//printf("%c",48);
+	printf("%c",88);
 }
 
-void deleteCharacter(int x,int y){
+void deleteCharacter(int x,int y){ 						//Deletes character
 	gotoxy(x,y);
 	printf("%c",32);
 }
-
-void drawBlock(int x1, int y1, short N, struct positions *game){
+	
+void drawBlock(int x1, int y1, short N, struct positions *game){ 	//Draws block
 	short i = 0, j = 0;
 
 	(*game).block[N][0] = x1;				//Saves block start coordinates
 	(*game).block[N][1] = y1;
 
 	if((*game).block[N][2] == 0){			//Lives = 0
-		//PEOUT = 0x20;
 		PCOUT = 0x20;
 
 		for(i = 0 ; i < (*game).blockHeight ; i++){
@@ -160,10 +130,10 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				printf("%c",32);
 			}
 		}
-		(*game).block[N][0] = -10;
+		(*game).block[N][0] = -10;   		//Sets block coordinates out of field, if block is dead
 		(*game).block[N][1] = -10;
-		(*game).points     += 200 + (*game).pointBonus;
-		(*game).pointBonus += 100;
+		(*game).points     += 20 + (*game).pointBonus;	   //Adds points for every destroyed block
+		(*game).pointBonus += 10;						   //Adds bonus for every destroyed block
 		j = 0;
 		for(i = 0; i < (*game).numBlocks; i++){
 			if((*game).block[i][0] == -10){
@@ -171,14 +141,13 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 			}
 			
 			if(j == (*game).numBlocks){
-				if ((*game).level == 3){
+				if ((*game).level == 3){  					//Checks if player has won game
 					gotoxy(20, 79);
 					printf("You win the game!");
 					gotoxy(21, 79);
 					printf("The filthy Mexicans were kept out.");
 					gotoxy(22, 79);
 					printf("Press right button to kick their ass again");
-					//PEOUT = 0x02;
 					PCOUT = 0x01;
 					drawInfo(game);
 					for(i = -7; i <= 7; i++){
@@ -200,8 +169,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 
 				} else {
 					
-					(*game).level++;
-					//PEOUT = 0x02;
+					(*game).level++;						//Checks if player has won game
 					PCOUT = 0x01;
 					drawInfo(game);
 					for(i = -7; i <= 7; i++){
@@ -224,8 +192,8 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				}
 			}
 		}
-		//(*game).numBlocks--;
-	} else if((*game).block[N][2] == 1){	//Lives = 1
+
+	} else if((*game).block[N][2] == 1){	//Lives = 1  ---  Blue
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			color(4,0);
 			gotoxy(x1+i, y1);
@@ -233,7 +201,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				printf("%c",177);
 			}
 		}
-	} else if((*game).block[N][2] == 2){	//Lives = 2
+	} else if((*game).block[N][2] == 2){	//Lives = 2  ---  White
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			color(15,0);
 			gotoxy(x1+i, y1);
@@ -241,7 +209,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 				printf("%c",178);
 			}
 		}
-	} else if((*game).block[N][2] == 3){	//Lives = 3
+	} else if((*game).block[N][2] == 3){	//Lives = 3  ---  Red
 		for(i = 0 ; i < (*game).blockHeight ; i++){
 			color(1,0);
 			gotoxy(x1+i, y1);
@@ -254,7 +222,7 @@ void drawBlock(int x1, int y1, short N, struct positions *game){
 	drawInfo(game);
 }
 
-void drawInfo(struct positions *game){
+void drawInfo(struct positions *game){   	//Draws info on screen
 	gotoxy(2,87);
 	printf("%d", (*game).lives);
 	gotoxy(3,87);
@@ -263,7 +231,7 @@ void drawInfo(struct positions *game){
 	printf("%d", (*game).level);
 }
 
-void drawFlag(int lives){
+void drawFlag(int lives){	 				//Draws mexican flag gradually
 	int i, j;
 	if (lives == 2){
 		gotoxy(10,79);

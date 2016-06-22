@@ -5,11 +5,18 @@
 #define YMAX 50
 
 struct positions{
-	int length;
-	int lives;
+	char block[100][3];
+	char lives;
+	char level;
+
 	int points;
-	int level;
-	int height;
+	int ballAngle;
+	int strikerCenter;
+	int difficultyBall;
+	int difficultyStriker;
+
+	short height;
+	short length;
 	short ballX;
 	short ballY;
 	short oldBallX;
@@ -17,22 +24,17 @@ struct positions{
 	short speedX;
 	short speedY;
 	short hitTest;
-	int ballAngle;
-	int strikerCenter;
 	short numBlocks;
 	short blockLength;
 	short blockHeight;
 	short pointBonus;
-	char block[100][3];
-	int difficultyBall;
-	int difficultyStriker;
 };
 
 
 void gameInitial(struct positions *game);
-void nextPosition(struct positions *game, int BallTime);
+void nextPosition(struct positions *game, short ballTime);
 void releaseBall(struct positions *game);
-void mate(struct positions *game, short l, short v, short i);
+void deflectionChecker(struct positions *game, short l, short v, short i);
 void difficultyMenu(struct positions *game);
 
 
